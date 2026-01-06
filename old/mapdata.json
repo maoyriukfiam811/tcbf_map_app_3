@@ -1,0 +1,232 @@
+{
+  "rects": [
+    {
+      "no": 0,
+      "name": "testA",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        320,
+        180
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    },
+    {
+      "no": 0,
+      "name": "testB",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        420,
+        240
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        120,
+        180,
+        220
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    },
+    {
+      "no": 0,
+      "name": "Rect3",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        960,
+        540
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    },
+    {
+      "no": 0,
+      "name": "Rect4",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        980,
+        560
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    },
+    {
+      "no": 0,
+      "name": "Rect5",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        1000,
+        580
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    }
+  ],
+  "texts": [
+    {
+      "no": "0",
+      "text": "タイトル（削除不可）",
+      "position": [
+        10,
+        20
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    },
+    {
+      "no": "0",
+      "text": "Label2",
+      "position": [
+        960,
+        540
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    },
+    {
+      "no": "0",
+      "text": "Label3",
+      "position": [
+        980,
+        560
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    },
+    {
+      "no": "0",
+      "text": "Label4",
+      "position": [
+        1000,
+        580
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    }
+  ],
+  "categories": []
+}

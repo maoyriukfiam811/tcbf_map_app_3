@@ -1,0 +1,3522 @@
+{
+  "rects": [
+    {
+      "no": "A",
+      "name": "かざみ",
+      "name_pos": [
+        -60,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        375,
+        580
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "1",
+      "name": "FETISH",
+      "name_pos": [
+        -75,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        375,
+        620
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "9",
+      "name": "farm&\\ncidery",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        495,
+        675
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        -75,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        375,
+        720
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "1"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        -75,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        375,
+        695
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "1"
+    },
+    {
+      "no": "2",
+      "name": "秋田",
+      "name_pos": [
+        -50,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        460,
+        550
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "3",
+      "name": "North",
+      "name_pos": [
+        -60,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        460,
+        580
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "B",
+      "name": "yachi",
+      "name_pos": [
+        -55,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        460,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "4",
+      "name": "日ノモト",
+      "name_pos": [
+        -65,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 13,
+      "power": "300",
+      "center": [
+        460,
+        655
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "5",
+      "name": "YOKOHAMA",
+      "name_pos": [
+        -65,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 14,
+      "power": "300",
+      "center": [
+        460.0,
+        678.5
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "C",
+      "name": "TSUMU",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        495,
+        550
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "6",
+      "name": "エチゴ",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        495,
+        575
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "D",
+      "name": "contento",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        495,
+        600
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "7",
+      "name": "Romeo",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        495,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "8",
+      "name": "forest",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        495,
+        650
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "10",
+      "name": "Free-Spirits",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        585,
+        525
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "11",
+      "name": "いわて蔵",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        585,
+        550
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "12",
+      "name": "Beach culture",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "800",
+      "center": [
+        585,
+        575
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "E",
+      "name": "パンさん",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        585,
+        600
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "13",
+      "name": "鎌倉",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        585,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "F",
+      "name": "壽屋",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        585,
+        650
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "14",
+      "name": "ネスト",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        585,
+        675
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "15",
+      "name": "牛久",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        585,
+        700
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "G",
+      "name": "アオイ",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1500",
+      "center": [
+        645,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "16",
+      "name": "U.B.P.",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        670,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "17",
+      "name": "さかづき",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        730,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "18",
+      "name": "Deraileur",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        755,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "19",
+      "name": "安房麦酒",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        800,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "H",
+      "name": "まるてす\\n櫻井\\nブランデーケーキ",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 14,
+      "power": "300",
+      "center": [
+        825,
+        730
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "I",
+      "name": "コルヌコピア",
+      "name_pos": [
+        0,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 13,
+      "power": "500",
+      "center": [
+        855,
+        705
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        940,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "J",
+      "name": "bonbon\\nM&C",
+      "name_pos": [
+        -20,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        965,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "L",
+      "name": "ベルファーム",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1500",
+      "center": [
+        1015,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "M",
+      "name": "筑波ハム",
+      "name_pos": [
+        -15,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1070,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "20",
+      "name": "那須",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1125,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "21",
+      "name": "ふたこ",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1150,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "22",
+      "name": "DIAMOND",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1200,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "P",
+      "name": "TRIGGER",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        1280,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "22",
+      "name": "本庄",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1305,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "R",
+      "name": "ラマリニエール",
+      "name_pos": [
+        -15,
+        -125
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        1360,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "23",
+      "name": "甲州",
+      "name_pos": [
+        -15,
+        -50
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1385,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "24",
+      "name": "OKEI",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1440,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "25",
+      "name": "ロコビア",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1465,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1545,
+        745
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1520,
+        745
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "27",
+      "name": "Fujiyama",
+      "name_pos": [
+        -35,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1465,
+        745
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "39",
+      "name": "DREAM\\nBEER",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "800",
+      "center": [
+        1305,
+        740
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "その他",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "O",
+      "name": "龍神家",
+      "name_pos": [
+        -15,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1280,
+        740
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "27",
+      "name": "Repubrew",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1200,
+        615
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "28",
+      "name": "ROAST BEEF",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "1500",
+      "center": [
+        1200,
+        590
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "29",
+      "name": "pitka",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "1500",
+      "center": [
+        1200,
+        565
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "30",
+      "name": "Twin Peaks",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "800",
+      "center": [
+        1300,
+        615
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "31",
+      "name": "ぬとり",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        590
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "32",
+      "name": "スモーク・クラフト",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        565
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "35",
+      "name": "GARCIA",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        1300,
+        340
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "36",
+      "name": "Distant Shores",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        315
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "Q",
+      "name": "より味ち",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1300,
+        290
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "37",
+      "name": "ホップドッグ",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        265
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "38",
+      "name": "つくば",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        1300,
+        240
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "N",
+      "name": "シダモ",
+      "name_pos": [
+        -60,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1200,
+        290
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "39",
+      "name": "OUR brewing",
+      "name_pos": [
+        -110,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1200,
+        265
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "40",
+      "name": "さかい河岸",
+      "name_pos": [
+        -90,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1200,
+        240
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "25",
+      "name": "ISHINOMAKI",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1520,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "26",
+      "name": "TSUMUGI",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        1545,
+        835
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "33",
+      "name": "ホップガーデン",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        505
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "34",
+      "name": "シュエット",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "1000",
+      "center": [
+        1300,
+        480
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "cir",
+      "name": "circular",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1300,
+        215
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "info",
+      "name_pos": [
+        -20,
+        -15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 390,
+      "font_size": 17,
+      "power": "600",
+      "center": [
+        865,
+        595
+      ],
+      "size": [
+        50,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 330,
+      "classification": "tcbf",
+      "tent": "2",
+      "light": "0"
+    },
+    {
+      "no": "K",
+      "name": "ほっとまん企画",
+      "name_pos": [
+        -10,
+        20
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 270,
+      "font_size": 15,
+      "power": "500",
+      "center": [
+        990,
+        625
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "Stage/sub",
+      "name_pos": [
+        -10,
+        15
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "3000",
+      "center": [
+        1080,
+        660
+      ],
+      "size": [
+        35,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "stage",
+      "tent": "2",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "Stage/main",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "5000",
+      "center": [
+        680,
+        620
+      ],
+      "size": [
+        35,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 270,
+      "classification": "stage",
+      "tent": "2",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "本部",
+      "name_pos": [
+        -15,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "300",
+      "center": [
+        1040,
+        590
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "1",
+      "light": "0"
+    },
+    {
+      "no": "a",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        480,
+        470
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "b",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        375,
+        665
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "c",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        615,
+        715
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "d",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        805,
+        705
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "e",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1015,
+        825
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "f",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1155,
+        745
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "g",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1050,
+        618
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "h",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1125,
+        640
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "i",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1375,
+        865
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "j",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1510,
+        709
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 90,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "m",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1155,
+        505
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "n",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        1155,
+        330
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "k",
+      "name": "",
+      "name_pos": [
+        0,
+        0
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        795,
+        335
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "配電盤",
+      "name_pos": [
+        25,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        225,
+        100
+      ],
+      "size": [
+        15,
+        25
+      ],
+      "color": [
+        255,
+        190,
+        159
+      ],
+      "angle": 0,
+      "classification": "panel",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "beer",
+      "name_pos": [
+        25,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        225,
+        30
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "food",
+      "name_pos": [
+        25,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        225,
+        65
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        255,
+        255,
+        128
+      ],
+      "angle": 0,
+      "classification": "food",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "Stage",
+      "name_pos": [
+        25,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        225,
+        135
+      ],
+      "size": [
+        35,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "stage",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": "",
+      "name": "info/circular/本部",
+      "name_pos": [
+        25,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 360,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        225,
+        170
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        128,
+        255,
+        255
+      ],
+      "angle": 0,
+      "classification": "tcbf",
+      "tent": "0",
+      "light": "0"
+    }
+  ],
+  "texts": [
+    {
+      "no": "0",
+      "text": "2025_tcbf_map",
+      "position": [
+        10,
+        20
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    },
+    {
+      "no": "0",
+      "text": "資材置場",
+      "position": [
+        1070,
+        585
+      ],
+      "font_size": 17,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    },
+    {
+      "no": "0",
+      "text": "保護養生",
+      "position": [
+        975,
+        905
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 90
+    },
+    {
+      "no": "0",
+      "text": "プール",
+      "position": [
+        950,
+        420
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0
+    }
+  ],
+  "categories": [
+    {
+      "name": "a",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          440,
+          440
+        ],
+        [
+          480,
+          440
+        ],
+        [
+          480,
+          520
+        ],
+        [
+          520,
+          520
+        ],
+        [
+          520,
+          715
+        ],
+        [
+          480,
+          715
+        ],
+        [
+          480,
+          600
+        ],
+        [
+          440,
+          600
+        ]
+      ],
+      "alert": false,
+      "power_limit": "3000"
+    },
+    {
+      "name": "b",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          360,
+          565
+        ],
+        [
+          400,
+          565
+        ],
+        [
+          400,
+          600
+        ],
+        [
+          480,
+          600
+        ],
+        [
+          480,
+          715
+        ],
+        [
+          400,
+          715
+        ],
+        [
+          400,
+          750
+        ],
+        [
+          360,
+          750
+        ]
+      ],
+      "alert": false,
+      "power_limit": "4000"
+    },
+    {
+      "name": "c",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          560,
+          520
+        ],
+        [
+          600,
+          520
+        ],
+        [
+          600,
+          715
+        ],
+        [
+          560,
+          715
+        ]
+      ],
+      "alert": false,
+      "power_limit": "4000"
+    },
+    {
+      "name": "d",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          600,
+          710
+        ],
+        [
+          820,
+          710
+        ],
+        [
+          820,
+          570
+        ],
+        [
+          905,
+          570
+        ],
+        [
+          905,
+          755
+        ],
+        [
+          600,
+          755
+        ]
+      ],
+      "alert": false,
+      "power_limit": "5000"
+    },
+    {
+      "name": "e",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1055,
+          810
+        ],
+        [
+          1055,
+          845
+        ],
+        [
+          1335,
+          845
+        ],
+        [
+          1335,
+          810
+        ]
+      ],
+      "alert": false,
+      "power_limit": "4000"
+    },
+    {
+      "name": "i",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1335,
+          810
+        ],
+        [
+          1335,
+          845
+        ],
+        [
+          1570,
+          845
+        ],
+        [
+          1570,
+          810
+        ]
+      ],
+      "alert": false,
+      "power_limit": "3000"
+    },
+    {
+      "name": "g",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          925,
+          605
+        ],
+        [
+          925,
+          640
+        ],
+        [
+          1060,
+          640
+        ],
+        [
+          1060,
+          580
+        ],
+        [
+          1020,
+          580
+        ],
+        [
+          1020,
+          605
+        ]
+      ],
+      "alert": false,
+      "power_limit": "4000"
+    },
+    {
+      "name": "h",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1050,
+          645
+        ],
+        [
+          1050,
+          680
+        ],
+        [
+          1105,
+          680
+        ],
+        [
+          1105,
+          645
+        ]
+      ],
+      "alert": false,
+      "power_limit": "3000"
+    },
+    {
+      "name": "m",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1170,
+          555
+        ],
+        [
+          1170,
+          635
+        ],
+        [
+          1345,
+          635
+        ],
+        [
+          1345,
+          445
+        ],
+        [
+          1295,
+          445
+        ],
+        [
+          1295,
+          555
+        ]
+      ],
+      "alert": false,
+      "power_limit": "8000"
+    },
+    {
+      "name": "j",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1265,
+          720
+        ],
+        [
+          1265,
+          755
+        ],
+        [
+          1565,
+          755
+        ],
+        [
+          1565,
+          720
+        ]
+      ],
+      "alert": false,
+      "power_limit": "3000"
+    },
+    {
+      "name": "n",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1175,
+          230
+        ],
+        [
+          1175,
+          305
+        ],
+        [
+          1295,
+          305
+        ],
+        [
+          1295,
+          390
+        ],
+        [
+          1345,
+          390
+        ],
+        [
+          1345,
+          230
+        ]
+      ],
+      "alert": false,
+      "power_limit": "8000"
+    },
+    {
+      "name": "f",
+      "color": [
+        150,
+        200,
+        250
+      ],
+      "points": [
+        [
+          1130,
+          720
+        ],
+        [
+          1130,
+          755
+        ],
+        [
+          1165,
+          755
+        ],
+        [
+          1165,
+          720
+        ]
+      ],
+      "alert": false,
+      "power_limit": "4000"
+    },
+    {
+      "name": "autoliv入口",
+      "color": [
+        255,
+        183,
+        183
+      ],
+      "points": [
+        [
+          1020,
+          810
+        ],
+        [
+          1020,
+          845
+        ],
+        [
+          1055,
+          845
+        ],
+        [
+          1055,
+          810
+        ]
+      ],
+      "alert": true,
+      "power_limit": "0"
+    },
+    {
+      "name": "2x2設置可",
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "points": [
+        [
+          440,
+          635
+        ],
+        [
+          440,
+          665
+        ],
+        [
+          480,
+          665
+        ],
+        [
+          480,
+          635
+        ]
+      ],
+      "alert": true,
+      "power_limit": "0"
+    },
+    {
+      "name": "設置不可",
+      "color": [
+        255,
+        128,
+        128
+      ],
+      "points": [
+        [
+          360,
+          635
+        ],
+        [
+          360,
+          665
+        ],
+        [
+          400,
+          665
+        ],
+        [
+          400,
+          635
+        ]
+      ],
+      "alert": true,
+      "power_limit": "0"
+    }
+  ]
+}

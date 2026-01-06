@@ -1,0 +1,68 @@
+[
+  {
+    "no": 0,
+    "name": "testA",
+    "name_pos": [
+      0,
+      0
+    ],
+    "name_color": [
+      0,
+      0,
+      0
+    ],
+    "name_angle": 0,
+    "font_size": 15,
+    "power": 0,
+    "center": [
+      320,
+      180
+    ],
+    "size": [
+      25,
+      25
+    ],
+    "color": [
+      100,
+      200,
+      100
+    ],
+    "angle": 0,
+    "classification": "beer",
+    "tent": 0,
+    "light": 0
+  },
+  {
+    "no": 0,
+    "name": "testB",
+    "name_pos": [
+      0,
+      0
+    ],
+    "name_color": [
+      0,
+      0,
+      0
+    ],
+    "name_angle": 0,
+    "font_size": 15,
+    "power": 0,
+    "center": [
+      420,
+      240
+    ],
+    "size": [
+      25,
+      25
+    ],
+    "color": [
+      120,
+      180,
+      220
+    ],
+    "angle": 0,
+    "classification": "beer",
+    "tent": 0,
+    "light": 0
+  }
+]
