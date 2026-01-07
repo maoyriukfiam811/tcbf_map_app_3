@@ -25,3 +25,6 @@ Thumbs.db
 # --- logs / cache ---
 *.log
 .cache/
+
+# --- その他 ---
+tcbf_map_app_3/
