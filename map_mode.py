@@ -5,8 +5,8 @@ from config import (
     font_path, SCREEN_W, SCREEN_H, DRAW_W, DRAW_H, MENU_ITEMS_ADD_SHAPE
     )
 from objects import (
-    ContextMenu, ShapeCache, Shape, Line, Polygon, ShapeManager, RotatingRect, TextLabel, DataManager, 
-    add_rect
+    PolygonShape, ContextMenu, ShapeCache, Shape, Line, Polygon, ShapeManager, RotatingRect, TextLabel, DataManager, 
+    add_rect, add_polygon
     )
 from object_editor import confirm_quit ,edit_object_window, edit_all_objects_window, show_power_table_with_category
 from utils import (
@@ -38,6 +38,9 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
         categories = []
     if not shapes:
         shapes = []
+    polygons = []
+    if not polygons:
+        polygons = []
 
     active = None
     active_rects = []
@@ -112,8 +115,8 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
 
     ACTION_HANDLERS = {
         "add_rect": add_rect,
+        "add_polygon": add_polygon,
         # "add_circle": add_circle,
-        # "add_line": add_line,
     }
 
 
@@ -127,6 +130,7 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
     running = True
     while running:
         now = pygame.time.get_ticks() / 1000.0
+
 
         # ---- 内部Surfaceにすべて描画 ----
         if need_redraw:
@@ -168,6 +172,18 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
             new_dirty = obj.draw_rects(draw_surface, font, is_active=is_active, name_pos_active=obj.name_pos_active, tent_highlight=tent_highlight)
             dirty.extend(new_dirty)
             obj.prev_dirty = new_dirty
+
+        
+        # Polygon 描画
+        for poly in polygons:
+            is_active = (poly == active)
+            new_dirty = poly.draw_polygon(
+                draw_surface,
+                is_active=is_active
+            )
+            dirty.extend(new_dirty)
+            poly.prev_dirty = new_dirty
+
 
         # 画面に反映
         pygame.display.update(dirty)
@@ -436,7 +452,7 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
             if event.type == pygame.QUIT:
                 res = confirm_quit()
                 if res:
-                    DataManager.save_all(rects, texts, categories, filename)
+                    DataManager.save_all(rects, texts, categories, polygons, filename)
                     return "back_to_mode_select"
                 elif res is False:
                     running = False
@@ -484,7 +500,7 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
                     if active is None and len(active_rects)==0:
                         res = confirm_quit()
                         if res:
-                            DataManager.save_all(rects, texts, categories, filename)
+                            DataManager.save_all(rects, texts, categories, polygons, filename)
                             return "back_to_mode_select"
                         elif res is False:
                             return "back_to_mode_select"
@@ -493,7 +509,7 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
 
                 # SAVE
                 if ctrl and event.key == pygame.K_s:
-                    DataManager.save_all(rects, texts, categories, filename)
+                    DataManager.save_all(rects, texts, categories, polygons, filename)
                     print("Saved all objects.")
                     save_message_until = now + 3  # 今から3秒後
                 # ADD NEW RECT
@@ -773,48 +789,29 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
                     pos = None  # クリック無効領域
 
 
-                # 右クリックメニュー
-                if event.button == 3 and pos is not None:
-                    show_menu = True
-                    context_menu = ContextMenu(MENU_ITEMS_ADD_SHAPE, pos) # コンテキストメニュー作成
-                    print("Right click detected. Opening context menu.")
-                    menu_pos = pos
+                # 右クリックでメニュー生成
+                if event.button == 3:
+                    temporary_pos = event.pos
+                    context_menu = ContextMenu(MENU_ITEMS_ADD_SHAPE, event.pos) # ここで右クリックによる形状追加itemsを渡す
+                    continue
 
-                elif event.button == 1 and show_menu:  # 左クリック
-                    mx, my = pos
-                    x, y = menu_pos
-
-                    for i, (label, action) in enumerate(MENU_ITEMS_ADD_SHAPE):
-                        r = pygame.Rect(x, y + i*24, 160, 24)
-                        if r.collidepoint(mx, my):
-                            ACTION_HANDLERS[action]()
-                            break
-
-                    show_menu = False
-
-                if show_menu:
-                    x, y = menu_pos
-                    for i, (label, _) in enumerate(MENU_ITEMS_ADD_SHAPE):
-                        r = pygame.Rect(x, y + i*24, 160, 24)
-                        pygame.draw.rect(screen, (240,240,240), r)
-                        pygame.draw.rect(screen, (0,0,0), r, 1)
-                        txt = font.render(label, True, (0,0,0))
-                        screen.blit(txt, (r.x+5, r.y+4))
-
-                # メニューがある場合は優先処理
+                # メニューがある場合は最優先で処理
                 if context_menu:
-                    action = context_menu.handle_event(event)
+                    action = context_menu.handle_event(event) #返値は追加アクション名 / 例："add_rect"
                     if action:
                         if action == "add_rect":
-                            new = add_rect(rects, active, pos)
+                            new = add_rect(rects, active, temporary_pos, screen, context_menu=True)
                             rects.append(new)
                             active = new
-                        # elif action == "add_circle":
-                        #     shapes.append(CircleShape(center=event.pos))
-                        # elif action == "add_polygon":
-                        #     shapes.append(PolygonShape(center=event.pos))
-                        # context_menu = None
+                    if action:
+                        if action == "add_polygon":
+                            new = add_polygon(polygons, active, temporary_pos, screen, context_menu=True)
+                            polygons.append(new)
+                            active = new
+                    if not context_menu.visible:
+                        context_menu = None
                     continue
+
                     
                 # 四角形選択・ドラッグ開始
                 for r in reversed(rects): # 手前の四角形から優先的に選択
@@ -876,11 +873,10 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
                         active,
                         event.pos,
                         screen,
-                        DRAW_W,
-                        DRAW_H,
                         SCREEN_W,
                         SCREEN_H
                     )
+
 
         # 内部解像度で全て描画したあと
         sw, sh = screen.get_size()
@@ -900,6 +896,12 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
         offset_x = (sw - scaled_w) // 2
         offset_y = (sh - scaled_h) // 2
         screen.blit(scaled, (offset_x, offset_y))
+
+        # コンテキストメニュー描画
+        if context_menu:
+            context_menu.draw(screen, font_small)
+
+
         pygame.display.flip()
 
         clock.tick(60) # FPS
