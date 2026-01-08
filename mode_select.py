@@ -79,9 +79,10 @@ def select_mode(screen, font, bg_image_path=None, json_path=None):
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if load_button.collidepoint(event.pos):
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=None)
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=None)
                     if full_path:
                         json_path = full_path
+                        save_json_path(json_path)
 
                 if image_button.collidepoint(event.pos):
                     bg_image_path = select_background_file()
@@ -89,20 +90,20 @@ def select_mode(screen, font, bg_image_path=None, json_path=None):
                         save_bg_path(bg_image_path)
 
                 if edit_button.collidepoint(event.pos):
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=json_path)
-                    return "edit", rects, texts, categories, shapes, filename, full_path
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=json_path)
+                    return "edit", rects, texts, categories, polygons, filename, full_path
 
                 if map_button.collidepoint(event.pos):
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=json_path)
-                    return "map" , rects, texts, categories, shapes, filename, full_path
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=json_path)
+                    return "map" , rects, texts, categories, polygons, filename, full_path
                 
                 if clear_button.collidepoint(event.pos):
-                    rects, texts, categories, shapes, filename, full_path = [], [], [], [], None, None
+                    rects, texts, categories, polygons, filename, full_path = [], [], [], [], None, None
                     json_path = None
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=None)
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=None)
                     if full_path:
                         json_path = full_path
                         save_json_path(json_path)
@@ -113,13 +114,12 @@ def select_mode(screen, font, bg_image_path=None, json_path=None):
                         save_bg_path(bg_image_path)
 
                 if event.key == pygame.K_3:
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=json_path)
-                    return "edit", rects, texts, categories, shapes, filename, full_path
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=json_path)
+                    return "edit", rects, texts, categories, polygons, filename, full_path
 
                 if event.key == pygame.K_4:
-                    rects, texts, categories, shapes, filename, full_path = DataManager.load_all(filename=json_path)
-                    return "map", rects, texts, categories, shapes, filename, full_path
-
+                    rects, texts, categories, polygons, filename, full_path = DataManager.load_all(filename=json_path)
+                    return "map", rects, texts, categories, polygons, filename, full_path
 
 
 # def select_mode(screen, font, bg_image_path=None):
