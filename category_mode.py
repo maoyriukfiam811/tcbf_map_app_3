@@ -2,7 +2,8 @@ import pygame
 import tkinter as tk
 from tkinter import simpledialog
 from utils import (draw_background, load_and_resize_bg, load_bg_path, point_in_category, 
-                   get_active_point_index, get_active_category_index, drag_vertex, drag_category, handle_category_movement, handle_vertex_movement)
+                   get_active_point_index, get_active_category_index, drag_vertex, drag_category_or_polygon, handle_category_movement, handle_vertex_movement,
+                   screen_to_internal, calc_vertex_drag_offset, calc_category_drag_offset)
 from objects import CategoryShape, DataManager
 from config import font_path, SCREEN_W, SCREEN_H
 from object_editor import confirm_quit, edit_category_dialog
@@ -384,49 +385,36 @@ def run_category_editor(screen, font, rects, texts, categories, shapes, filename
                         # clicked = True
                         continue # 追加後は他の処理をスキップ
 
-                if event.button == 1: # 左クリック
-                    # アクティブ頂点/アクティブカテゴリ判定
+                if event.button == 1:  # 左クリック
                     selected_vertex = get_active_point_index(pos, categories, radius=8)
                     selected_cat = get_active_category_index(pos, categories)
 
+                    internal_pos = screen_to_internal(
+                        event.pos,
+                        screen.get_size(),
+                        (DRAW_W, DRAW_H)
+                    )
+
                     if selected_vertex is not None:
-                        ci,vi = selected_vertex
+                        ci, vi = selected_vertex
                         dragging = True
                         selected_cat = ci
-                        x, y =categories[ci].points[vi] 
-                        vertex_drag_offset = (x - pos[0], y - pos[1])
 
-                        # 内部座標に変換
-                        window_w, window_h = screen.get_size()
-                        scale = min(window_w / DRAW_W, window_h / DRAW_H)
-                        offset_x = (window_w - DRAW_W*scale)//2
-                        offset_y = (window_h - DRAW_H*scale)//2
-                        internal_x = (event.pos[0] - offset_x)/scale
-                        internal_y = (event.pos[1] - offset_y)/scale
-
-                        # 外部変数に offset 保存
-                        vx, vy = categories[ci].points[vi]
-                        vertex_drag_offset = (vx - internal_x, vy - internal_y)
-                        category_drag_offset = None  # 同時にカテゴリドラッグは無効化
+                        vertex_drag_offset = calc_vertex_drag_offset(
+                            categories[ci].points[vi],
+                            internal_pos
+                        )
+                        category_drag_offset = None
 
                     elif selected_cat is not None:
                         dragging = True
                         selected_vertex = None
 
-                        # 内部座標に変換
-                        window_w, window_h = screen.get_size()
-                        scale = min(window_w / DRAW_W, window_h / DRAW_H)
-                        offset_x = (window_w - DRAW_W*scale)//2
-                        offset_y = (window_h - DRAW_H*scale)//2
-                        internal_x = (event.pos[0] - offset_x)/scale
-                        internal_y = (event.pos[1] - offset_y)/scale
-
-                        # --- 基準点は points[0] のみを使う ---
-                        x0, y0 = categories[selected_cat].points[0]
-                        
-                        # --- offset 保存 ---
-                        category_drag_offset = (x0 - internal_x, y0 - internal_y)
-                        vertex_drag_offset = None  # 同時に頂点ドラッグは無効化
+                        category_drag_offset = calc_category_drag_offset(
+                            categories[selected_cat],
+                            internal_pos
+                        )
+                        vertex_drag_offset = None
 
                     else:
                         dragging = False
@@ -448,7 +436,7 @@ def run_category_editor(screen, font, rects, texts, categories, shapes, filename
                         x, y = categories[ci].points[vi]
                         categories[ci].points[vi] = (x + dx , y + dy)
                     elif selected_cat is not None:
-                        dx, dy = drag_category(categories[selected_cat], event.pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset=category_drag_offset)
+                        dx, dy = drag_category_or_polygon(categories[selected_cat], event.pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset=category_drag_offset)
                         cat = categories[selected_cat]
                         cat.points = [(x+dx, y+dy) for (x,y) in cat.points]
 

@@ -379,7 +379,7 @@ def handle_category_movement(category, now, last_move_time, move_delay,
     return last_move_time
 
 
-def drag_category(category, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset):
+def drag_category_or_polygon(category, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset):
     """
     カテゴリ多角形全体のドラッグ移動量(dx, dy)を返す。
     """
@@ -439,6 +439,45 @@ def drag_vertex(category, vi, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREE
     dy = ny - y0
 
     return dx, dy
+
+
+def screen_to_internal(pos, screen_size, draw_size):
+    """
+    pos         : (screen_x, screen_y)
+    screen_size : (window_w, window_h)
+    draw_size   : (DRAW_W, DRAW_H)
+
+    return (internal_x, internal_y)
+    """
+    sx, sy = pos
+    window_w, window_h = screen_size
+    draw_w, draw_h = draw_size
+
+    scale = min(window_w / draw_w, window_h / draw_h)
+    offset_x = (window_w - draw_w * scale) // 2
+    offset_y = (window_h - draw_h * scale) // 2
+
+    ix = (sx - offset_x) / scale
+    iy = (sy - offset_y) / scale
+
+    return ix, iy
+
+def calc_vertex_drag_offset(vertex_pos, mouse_pos_internal):
+    """
+    vertex_pos        : (vx, vy)
+    mouse_pos_internal: (ix, iy)
+    """
+    vx, vy = vertex_pos
+    ix, iy = mouse_pos_internal
+    return vx - ix, vy - iy
+
+def calc_category_drag_offset(category, mouse_pos_internal):
+    """
+    category : CategoryShape
+    """
+    x0, y0 = category.points[0]
+    ix, iy = mouse_pos_internal
+    return x0 - ix, y0 - iy
 
 
 # -----------------
@@ -568,3 +607,47 @@ def count_total_by_classification(rects):
 
     return counts
 
+import math
+
+def point_to_segment_distance(p, a, b):
+    """
+    polygon用
+    p : (x, y) 判定点
+    a : (x, y) 線分始点
+    b : (x, y) 線分終点
+    return : 最短距離
+    """
+    px, py = p
+    ax, ay = a
+    bx, by = b
+
+    dx = bx - ax
+    dy = by - ay
+
+    if dx == 0 and dy == 0:
+        # a == b（点）
+        return math.hypot(px - ax, py - ay)
+
+    # 射影パラメータ t
+    t = ((px - ax) * dx + (py - ay) * dy) / (dx*dx + dy*dy)
+    t = max(0, min(1, t))
+
+    closest_x = ax + t * dx
+    closest_y = ay + t * dy
+
+    return math.hypot(px - closest_x, py - closest_y)
+
+def hit_test_polyline(pos, points, tolerance=6):
+    """
+    pos       : マウス位置
+    points    : [(x,y), (x,y), ...]
+    tolerance : 判定半径（px）
+    """
+    if len(points) < 2:
+        return False
+
+    for i in range(len(points) - 1):
+        if point_to_segment_distance(pos, points[i], points[i+1]) <= tolerance:
+            return True
+
+    return False
