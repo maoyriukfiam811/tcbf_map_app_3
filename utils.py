@@ -7,6 +7,19 @@ import config
 from tkinter import ttk, simpledialog, filedialog, messagebox
 from config import DRAW_W, DRAW_H, SCREEN_W, SCREEN_H
 
+
+def convert_mouse_to_draw_coords(pos, screen):
+    """マウス座標を描画用座標に変換"""
+    sw, sh = screen.get_size()
+    scale_x = config.DRAW_W / sw
+    scale_y = config.DRAW_H / sh
+
+    mx, my = pos
+    mx *= scale_x
+    my *= scale_y
+
+    return mx, my
+
 # -----------------------------
 # ユーティリティ関数
 # -----------------------------
@@ -34,18 +47,20 @@ def categories_name_containing_rect(center, categories):
             category_list.append(cat.name)
     return category_list
 
-def drag_object(obj, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H):
+def drag_object(obj, mouse_pos, screen, SCREEN_W, SCREEN_H):
     """ドラッグ中オブジェクト（Rect/Text）を移動させる共通関数"""
     if not getattr(obj, "dragging", False):
         return
 
-    sw, sh = screen.get_size()
-    scale_x = DRAW_W / sw
-    scale_y = DRAW_H / sh
+    # sw, sh = screen.get_size()
+    # scale_x = DRAW_W / sw
+    # scale_y = DRAW_H / sh
 
-    mx, my = mouse_pos
-    mx *= scale_x
-    my *= scale_y
+    # mx, my = mouse_pos
+    # mx *= scale_x
+    # my *= scale_y
+
+    mx, my = convert_mouse_to_draw_coords(mouse_pos, screen)
 
     ox, oy = obj.drag_offset
 
@@ -458,6 +473,7 @@ def load_json_path():
     return None
 
 def save_json_path(path):
+    print("Saving JSON path:", path)
     with open(JSON_FILE, "w", encoding="utf-8") as f:
         json.dump({"path": path}, f, ensure_ascii=False, indent=2)
 

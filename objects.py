@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from os.path import basename
 from tkinter import filedialog
 from tkinter import colorchooser
-from utils import get_rotated_rect_points, count_total_by_classification, categories_power_list, point_in_category
+from utils import get_rotated_rect_points, count_total_by_classification, categories_power_list, point_in_category, convert_mouse_to_draw_coords
 from config import CATEGORIES_FILE, RECTS_FILE, font_path, SCREEN_W, SCREEN_H
 
 # -----------------------------
@@ -16,7 +16,7 @@ from config import CATEGORIES_FILE, RECTS_FILE, font_path, SCREEN_W, SCREEN_H
 # -----------------------------
 class DataManager:
     @classmethod
-    def save_all(cls, rects, texts, categories, shapes, filename=None):
+    def save_all(cls, rects, texts, categories, polygons, filename=None):
         """rect, text, category をまとめて保存"""
         from object_editor import tk_file_dialog_open
 
@@ -46,7 +46,7 @@ class DataManager:
             "rects":      [r.to_dict() for r in rects],
             "texts":      [t.to_dict() for t in texts],
             "categories": [c.to_dict() for c in categories],
-            "shapes":     [s.to_dict() for s in shapes],
+            "polygons":     [s.to_dict() for s in polygons],
         }
 
         with open(filename, "w", encoding="utf-8") as f:
@@ -67,6 +67,7 @@ class DataManager:
                 filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
             )
 
+
         if not filename:
             print("読み込みキャンセル")
             return [], [], [], [], "", ""
@@ -83,12 +84,12 @@ class DataManager:
         rects      = [RotatingRect.from_dict(d)  for d in data.get("rects", [])]
         texts      = [TextLabel.from_dict(d)     for d in data.get("texts", [])]
         categories = [CategoryShape.from_dict(d) for d in data.get("categories", [])]
-        shapes     = [Shape.from_dict(d)         for d in data.get("shapes", [])]
+        polygons   = [PolygonShape.from_dict(d)         for d in data.get("polygons", [])]
 
         full_path = filename
         filename = basename(filename)
 
-        return rects, texts, categories, shapes, filename, full_path
+        return rects, texts, categories, polygons, filename, full_path
 
 
 # -----------------------------
@@ -96,11 +97,28 @@ class DataManager:
 # -----------------------------
 class ContextMenu:
     def __init__(self, items, pos):
-        self.items = items          # [(label, action)]
+        """
+        items : [(label, action), ...]
+        pos   : (x, y)
+        """
+        self.items = items
         self.pos = pos
         self.width = 160
         self.item_h = 24
         self.visible = True
+        self.hover = -1
+
+    def _update_hover(self, mouse_pos):
+        """マウス位置から hover index を計算"""
+        mx, my = mouse_pos
+        x, y = self.pos
+
+        if x <= mx <= x + self.width:
+            idx = (my - y) // self.item_h
+            if 0 <= idx < len(self.items):
+                self.hover = idx
+                return
+
         self.hover = -1
 
     def draw(self, screen, font):
@@ -110,42 +128,56 @@ class ContextMenu:
         x, y = self.pos
         h = len(self.items) * self.item_h
 
-        pygame.draw.rect(screen, (230,230,230), (x, y, self.width, h))
-        pygame.draw.rect(screen, (0,0,0), (x, y, self.width, h), 1)
+        # 背景
+        pygame.draw.rect(screen, (230, 230, 230), (x, y, self.width, h))
+        pygame.draw.rect(screen, (0, 0, 0), (x, y, self.width, h), 1)
 
+        # 各項目
         for i, (label, _) in enumerate(self.items):
-            r = pygame.Rect(x, y+i*self.item_h, self.width, self.item_h)
-            if i == self.hover:
-                pygame.draw.rect(screen, (200,200,200), r)
+            r_y = y + i * self.item_h
 
-            txt = font.render(label, True, (0,0,0))
-            screen.blit(txt, (x+6, y+4+i*self.item_h))
+            if i == self.hover:
+                pygame.draw.rect(
+                    screen,
+                    (200, 200, 200),
+                    (x, r_y, self.width, self.item_h)
+                )
+
+            txt = font.render(label, True, (0, 0, 0))
+            screen.blit(txt, (x + 6, r_y + 4))
 
     def handle_event(self, event):
         if not self.visible:
             return None
 
+        # hover 更新（移動時）
         if event.type == pygame.MOUSEMOTION:
-            mx, my = event.pos
-            x, y = self.pos
-            if x <= mx <= x+self.width:
-                idx = (my - y) // self.item_h
-                self.hover = idx if 0 <= idx < len(self.items) else -1
-            else:
-                self.hover = -1
+            self._update_hover(event.pos)
 
+        # クリック判定
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and self.hover != -1:
-                self.visible = False
-                return self.items[self.hover][1]
+            if event.button == 1:
+                # 念のためクリック時にも hover 再計算
+                self._update_hover(event.pos)
+
+                if self.hover != -1:
+                    label, action = self.items[self.hover]
+                    print("コンテキストメニュー選択:", label)
+                    self.visible = False
+                    return action
+                else:
+                    # メニュー外クリック
+                    self.visible = False
+
             else:
+                # 左クリック以外（右クリックなど）でも閉じる
                 self.visible = False
 
+        # ESC で閉じる
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.visible = False
 
         return None
-
 
 
 # -----------------------------
@@ -300,170 +332,6 @@ class InfoPanel:
 
     def draw(self, screen, pos=(0, 0)):
         screen.blit(self.surface, pos)
-
-
-
-# -----------------------------
-# 図形描画クラス
-# -----------------------------
-class ShapeCache:
-    def __init__(self, size):
-        self.size = size
-        self.surface = pygame.Surface(size, pygame.SRCALPHA)
-        self.dirty = True
-
-    def invalidate(self):
-        """shape が変更されたら呼ぶ"""
-        self.dirty = True
-
-    def rebuild(self, shapes):
-        """キャッシュを再構築"""
-        self.surface.fill((0, 0, 0, 0))  # 透明クリア
-
-        for s in shapes:
-            s.draw(self.surface)
-
-        self.dirty = False
-
-    def draw(self, screen, shapes):
-        """screen に描画"""
-        if self.dirty:
-            self.rebuild(shapes)
-
-        screen.blit(self.surface, (0, 0))
-
-class Shape:
-    def to_dict(self):
-        raise NotImplementedError
-
-    @classmethod
-    def from_dict(cls, d):
-        t = d.get("type")
-        if t == "line":
-            return Line.from_dict(d)
-        elif t == "polygon":
-            return Polygon.from_dict(d)
-        # elif t == "circle":
-        #     return Circle.from_dict(d)
-        else:
-            raise ValueError(f"Unknown shape type: {t}")
-
-# # 共通基底クラス
-# class Shape(ABC):
-#     def __init__(self, color=(0,0,0), width=1):
-#         self.color = color
-#         self.width = width
-
-#     @abstractmethod
-#     def draw(self, surface):
-#         pass
-
-#     def contains_point(self, p):
-#         return False
-
-#     def get_bbox(self):
-#         return None
-
-# 直線クラス
-class Line:
-    def __init__(self, p1, p2, color=(0,0,0), width=1):
-        self.p1 = tuple(p1)
-        self.p2 = tuple(p2)
-        self.color = tuple(color)
-        self.width = width
-
-    def draw(self, surface):
-        pygame.draw.line(surface, self.color, self.p1, self.p2, self.width)
-
-    def to_dict(self):
-        return {
-            "type": "Line",
-            "p1": list(self.p1),
-            "p2": list(self.p2),
-            "color": list(self.color),
-            "width": self.width,
-        }
-
-    @staticmethod
-    def from_dict(d):
-        return Line(
-            p1=d["p1"],
-            p2=d["p2"],
-            color=d.get("color", (0,0,0)),
-            width=d.get("width", 1),
-        )
-
-
-# ポリゴンクラス
-class Polygon:
-    def __init__(self, points, color=(0,0,0), width=1, closed=True):
-        self.points = [tuple(p) for p in points]
-        self.color = tuple(color)
-        self.width = width
-        self.closed = closed
-
-    def draw(self, surface):
-        if self.closed:
-            pygame.draw.polygon(surface, self.color, self.points, self.width)
-        else:
-            pygame.draw.lines(surface, self.color, False, self.points, self.width)
-
-    def to_dict(self):
-        return {
-            "type": "Polygon",
-            "points": [list(p) for p in self.points],
-            "color": list(self.color),
-            "width": self.width,
-            "closed": self.closed,
-        }
-
-    @staticmethod
-    def from_dict(d):
-        return Polygon(
-            points=d["points"],
-            color=d.get("color", (0,0,0)),
-            width=d.get("width", 1),
-            closed=d.get("closed", True),
-        )
-
-# 図形リスト保存
-def save_shapes(filename, shapes):
-    data = [s.to_dict() for s in shapes]
-
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-# 図形リスト読み込み
-def load_shapes(filename):
-    if not os.path.exists(filename):
-        return []
-
-    with open(filename, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    shapes = []
-    for d in data:
-        t = d.get("type")
-
-        if t == "RotatingRect":
-            shapes.append(RotatingRect.from_dict(d))
-        elif t == "Line":
-            shapes.append(Line.from_dict(d))
-        elif t == "Polygon":
-            shapes.append(Polygon.from_dict(d))
-
-    return shapes
-
-class ShapeManager:
-    def __init__(self):
-        self.shapes = []
-
-    def add(self, shape: Shape):
-        self.shapes.append(shape)
-
-    def draw(self, surface):
-        for s in self.shapes:
-            s.draw(surface)
 
 # -----------------------------
 # カテゴリ多角形クラス
@@ -668,7 +536,7 @@ class RotatingRect:
             self, 
             no=0, 
             name="rect", 
-            name_pos=(0,0), 
+            name_pos=(20,-10), 
             name_color=(0,0,0), 
             name_angle=0, 
             font_size=15, 
@@ -1077,21 +945,141 @@ class RotatingRect:
 
         return dirty
 
+# -----------------------------
+# ポリゴンクラス（マップ上オブジェクト）
+# -----------------------------
+class PolygonShape:
+    def __init__(
+        self,
+        points,
+        color=(150, 200, 250),
+        width=3,
+        show_vertices=True,
+    ):
+        self.points = list(points)        # [(x, y), ...]
+        self.color = tuple(color)
+        self.width = width
+        self.show_vertices = show_vertices
 
-def add_rect(rects, active, pos):
+        self.visible = True
+        self.prev_dirty = []
+
+    def to_dict(self):
+        """JSON保存用"""
+        return {
+            "points": [list(p) for p in self.points],
+            "color": list(self.color),
+            "width": self.width,
+            "show_vertices": self.show_vertices,
+        }
+
+    @classmethod
+    def from_dict(cls, d):
+        """JSON読み込み用"""
+        return cls(
+            points=[tuple(p) for p in d.get("points", [])],
+            color=tuple(d.get("color", (150, 200, 250))),
+            width=d.get("width", 3),
+            show_vertices=d.get("show_vertices", True),
+        )
+
+
+    def draw_polygon(
+        self,
+        draw_surface,
+        is_active=False,
+        active_vertex=None,
+        show_vertices=None,
+        show_vertex_index=False,
+    ):
+        if not self.visible or not self.points:
+            return []
+
+        if show_vertices is None:
+            show_vertices = self.show_vertices
+
+        dirty = []
+
+        # --- 描画範囲算出 ---
+        xs = [p[0] for p in self.points]
+        ys = [p[1] for p in self.points]
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
+
+        pad = 10
+        area = pygame.Rect(
+            min_x - pad,
+            min_y - pad,
+            (max_x - min_x) + pad * 2,
+            (max_y - min_y) + pad * 2
+        )
+
+        # --- 本体 ---
+        col = (255, 100, 100) if is_active else self.color
+        pygame.draw.lines(
+            draw_surface,
+            col,
+            False,
+            self.points,
+            self.width
+        )
+
+        # --- 頂点描画 ---
+        if show_vertices:
+            for i, (x, y) in enumerate(self.points):
+                if is_active and active_vertex == i:
+                    pygame.draw.circle(
+                        draw_surface,
+                        (255, 0, 0),
+                        (int(x), int(y)),
+                        6
+                    )
+                else:
+                    pygame.draw.circle(
+                        draw_surface,
+                        (0, 0, 255),
+                        (int(x), int(y)),
+                        6
+                    )
+
+        # --- active 時の頂点番号 ---
+        if is_active and show_vertex_index:
+            for i, (x, y) in enumerate(self.points):
+                no_surf = font.render(str(i), True, (0, 0, 0))
+                rect = no_surf.get_rect(center=(x, y - 12))
+                draw_surface.blit(no_surf, rect)
+                dirty.append(rect)
+
+        dirty.append(area)
+        return dirty
+
+
+
+
+def add_rect(rects, active, pos, screen, context_menu=False):
     name = f"Rect{len(rects)+1}"
 
     if active is None:
-        new = RotatingRect(
-            name=name,
-            center=(SCREEN_W//2, SCREEN_H//2),
-            size=(25, 25)
-        )
+        if not context_menu:
+            new = RotatingRect(
+                name=name,
+                center=(SCREEN_W//2, SCREEN_H//2),
+                size=(25, 25)
+            )
+        if context_menu:
+            mx, my = convert_mouse_to_draw_coords(pos, screen)
+
+            new = RotatingRect(
+                name=name,
+                center=(mx, my),
+                size=(25, 25),
+            )
     else:
         new = RotatingRect(
             name=name,
             center=pos,
             size=active.size,
+            angle=active.angle,
             name_pos=active.name_pos,
             name_angle=active.name_angle,
             classification=active.classification,
@@ -1102,3 +1090,16 @@ def add_rect(rects, active, pos):
     new.name_pos_active = False
     return new
 
+def add_polygon(polygons, active, pos, screen, context_menu=False):
+    name = f"Polygon{len(polygons)+1}"
+
+    if active is None:
+        points = [(100,100), (200,100), (100,200), (100,200)]
+
+    new = PolygonShape(
+        points=points,
+        color=(0,0,0),
+        width=2,
+    )
+
+    return new
