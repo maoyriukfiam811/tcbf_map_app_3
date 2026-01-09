@@ -473,6 +473,7 @@ def load_json_path():
     return None
 
 def save_json_path(path):
+    print("Saving JSON path:", path)
     with open(JSON_FILE, "w", encoding="utf-8") as f:
         json.dump({"path": path}, f, ensure_ascii=False, indent=2)
 

@@ -67,6 +67,7 @@ class DataManager:
                 filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
             )
 
+
         if not filename:
             print("読み込みキャンセル")
             return [], [], [], [], "", ""
@@ -83,7 +84,7 @@ class DataManager:
         rects      = [RotatingRect.from_dict(d)  for d in data.get("rects", [])]
         texts      = [TextLabel.from_dict(d)     for d in data.get("texts", [])]
         categories = [CategoryShape.from_dict(d) for d in data.get("categories", [])]
-        polygons     = [Shape.from_dict(d)         for d in data.get("polygons", [])]
+        polygons   = [PolygonShape.from_dict(d)         for d in data.get("polygons", [])]
 
         full_path = filename
         filename = basename(filename)
@@ -332,170 +333,6 @@ class InfoPanel:
     def draw(self, screen, pos=(0, 0)):
         screen.blit(self.surface, pos)
 
-
-
-# -----------------------------
-# 図形描画クラス
-# -----------------------------
-class ShapeCache:
-    def __init__(self, size):
-        self.size = size
-        self.surface = pygame.Surface(size, pygame.SRCALPHA)
-        self.dirty = True
-
-    def invalidate(self):
-        """shape が変更されたら呼ぶ"""
-        self.dirty = True
-
-    def rebuild(self, shapes):
-        """キャッシュを再構築"""
-        self.surface.fill((0, 0, 0, 0))  # 透明クリア
-
-        for s in shapes:
-            s.draw(self.surface)
-
-        self.dirty = False
-
-    def draw(self, screen, shapes):
-        """screen に描画"""
-        if self.dirty:
-            self.rebuild(shapes)
-
-        screen.blit(self.surface, (0, 0))
-
-class Shape:
-    def to_dict(self):
-        raise NotImplementedError
-
-    @classmethod
-    def from_dict(cls, d):
-        t = d.get("type")
-        if t == "line":
-            return Line.from_dict(d)
-        elif t == "polygon":
-            return Polygon.from_dict(d)
-        # elif t == "circle":
-        #     return Circle.from_dict(d)
-        else:
-            raise ValueError(f"Unknown shape type: {t}")
-
-# # 共通基底クラス
-# class Shape(ABC):
-#     def __init__(self, color=(0,0,0), width=1):
-#         self.color = color
-#         self.width = width
-
-#     @abstractmethod
-#     def draw(self, surface):
-#         pass
-
-#     def contains_point(self, p):
-#         return False
-
-#     def get_bbox(self):
-#         return None
-
-# 直線クラス
-class Line:
-    def __init__(self, p1, p2, color=(0,0,0), width=1):
-        self.p1 = tuple(p1)
-        self.p2 = tuple(p2)
-        self.color = tuple(color)
-        self.width = width
-
-    def draw(self, surface):
-        pygame.draw.line(surface, self.color, self.p1, self.p2, self.width)
-
-    def to_dict(self):
-        return {
-            "type": "Line",
-            "p1": list(self.p1),
-            "p2": list(self.p2),
-            "color": list(self.color),
-            "width": self.width,
-        }
-
-    @staticmethod
-    def from_dict(d):
-        return Line(
-            p1=d["p1"],
-            p2=d["p2"],
-            color=d.get("color", (0,0,0)),
-            width=d.get("width", 1),
-        )
-
-
-# ポリゴンクラス
-class Polygon:
-    def __init__(self, points, color=(0,0,0), width=1, closed=True):
-        self.points = [tuple(p) for p in points]
-        self.color = tuple(color)
-        self.width = width
-        self.closed = closed
-
-    def draw(self, surface):
-        if self.closed:
-            pygame.draw.polygon(surface, self.color, self.points, self.width)
-        else:
-            pygame.draw.lines(surface, self.color, False, self.points, self.width)
-
-    def to_dict(self):
-        return {
-            "type": "Polygon",
-            "points": [list(p) for p in self.points],
-            "color": list(self.color),
-            "width": self.width,
-            "closed": self.closed,
-        }
-
-    @staticmethod
-    def from_dict(d):
-        return Polygon(
-            points=d["points"],
-            color=d.get("color", (0,0,0)),
-            width=d.get("width", 1),
-            closed=d.get("closed", True),
-        )
-
-# 図形リスト保存
-def save_shapes(filename, shapes):
-    data = [s.to_dict() for s in shapes]
-
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-# 図形リスト読み込み
-def load_shapes(filename):
-    if not os.path.exists(filename):
-        return []
-
-    with open(filename, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    shapes = []
-    for d in data:
-        t = d.get("type")
-
-        if t == "RotatingRect":
-            shapes.append(RotatingRect.from_dict(d))
-        elif t == "Line":
-            shapes.append(Line.from_dict(d))
-        elif t == "Polygon":
-            shapes.append(Polygon.from_dict(d))
-
-    return shapes
-
-class ShapeManager:
-    def __init__(self):
-        self.shapes = []
-
-    def add(self, shape: Shape):
-        self.shapes.append(shape)
-
-    def draw(self, surface):
-        for s in self.shapes:
-            s.draw(surface)
-
 # -----------------------------
 # カテゴリ多角形クラス
 # -----------------------------
@@ -690,114 +527,6 @@ class TextLabel:
         # 点が矩形内にあるか判定
         return rect.collidepoint(p)
 
-
-# -----------------------------
-# ポリゴンクラス（マップ上オブジェクト）
-# -----------------------------
-class PolygonShape:
-    def __init__(
-        self,
-        points,
-        color=(150, 200, 250),
-        width=3,
-        show_vertices=True,
-    ):
-        self.points = list(points)        # [(x, y), ...]
-        self.color = tuple(color)
-        self.width = width
-        self.show_vertices = show_vertices
-
-        self.visible = True
-        self.prev_dirty = []
-
-    def to_dict(self):
-        """JSON保存用"""
-        return {
-            "points": [list(p) for p in self.points],
-            "color": list(self.color),
-            "width": self.width,
-            "show_vertices": self.show_vertices,
-        }
-
-    @classmethod
-    def from_dict(cls, d):
-        """JSON読み込み用"""
-        return cls(
-            points=[tuple(p) for p in d.get("points", [])],
-            color=tuple(d.get("color", (150, 200, 250))),
-            width=d.get("width", 3),
-            show_vertices=d.get("show_vertices", True),
-        )
-
-
-    def draw_polygon(
-        self,
-        draw_surface,
-        font,
-        is_active=False,
-        active_vertex=None,
-        show_vertices=None,
-        show_vertex_index=False,
-    ):
-        if not self.visible or not self.points:
-            return []
-
-        if show_vertices is None:
-            show_vertices = self.show_vertices
-
-        dirty = []
-
-        # --- 描画範囲算出 ---
-        xs = [p[0] for p in self.points]
-        ys = [p[1] for p in self.points]
-        min_x, max_x = min(xs), max(xs)
-        min_y, max_y = min(ys), max(ys)
-
-        pad = 10
-        area = pygame.Rect(
-            min_x - pad,
-            min_y - pad,
-            (max_x - min_x) + pad * 2,
-            (max_y - min_y) + pad * 2
-        )
-
-        # --- 本体 ---
-        col = (255, 100, 100) if is_active else self.color
-        pygame.draw.polygon(
-            draw_surface,
-            col,
-            self.points,
-            self.width
-        )
-
-        # --- 頂点描画 ---
-        if show_vertices:
-            for i, (x, y) in enumerate(self.points):
-                if is_active and active_vertex == i:
-                    pygame.draw.circle(
-                        draw_surface,
-                        (255, 0, 0),
-                        (int(x), int(y)),
-                        6
-                    )
-                else:
-                    pygame.draw.circle(
-                        draw_surface,
-                        (0, 0, 255),
-                        (int(x), int(y)),
-                        6
-                    )
-
-        # --- active 時の頂点番号 ---
-        if is_active and show_vertex_index:
-            for i, (x, y) in enumerate(self.points):
-                no_surf = font.render(str(i), True, (0, 0, 0))
-                rect = no_surf.get_rect(center=(x, y - 12))
-                draw_surface.blit(no_surf, rect)
-                dirty.append(rect)
-
-        dirty.append(area)
-        return dirty
 
 # -----------------------------
 # 回転四角形クラス（マップ上オブジェクト）
@@ -1216,6 +945,116 @@ class RotatingRect:
 
         return dirty
 
+# -----------------------------
+# ポリゴンクラス（マップ上オブジェクト）
+# -----------------------------
+class PolygonShape:
+    def __init__(
+        self,
+        points,
+        color=(150, 200, 250),
+        width=3,
+        show_vertices=True,
+    ):
+        self.points = list(points)        # [(x, y), ...]
+        self.color = tuple(color)
+        self.width = width
+        self.show_vertices = show_vertices
+
+        self.visible = True
+        self.prev_dirty = []
+
+    def to_dict(self):
+        """JSON保存用"""
+        return {
+            "points": [list(p) for p in self.points],
+            "color": list(self.color),
+            "width": self.width,
+            "show_vertices": self.show_vertices,
+        }
+
+    @classmethod
+    def from_dict(cls, d):
+        """JSON読み込み用"""
+        return cls(
+            points=[tuple(p) for p in d.get("points", [])],
+            color=tuple(d.get("color", (150, 200, 250))),
+            width=d.get("width", 3),
+            show_vertices=d.get("show_vertices", True),
+        )
+
+
+    def draw_polygon(
+        self,
+        draw_surface,
+        is_active=False,
+        active_vertex=None,
+        show_vertices=None,
+        show_vertex_index=False,
+    ):
+        if not self.visible or not self.points:
+            return []
+
+        if show_vertices is None:
+            show_vertices = self.show_vertices
+
+        dirty = []
+
+        # --- 描画範囲算出 ---
+        xs = [p[0] for p in self.points]
+        ys = [p[1] for p in self.points]
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
+
+        pad = 10
+        area = pygame.Rect(
+            min_x - pad,
+            min_y - pad,
+            (max_x - min_x) + pad * 2,
+            (max_y - min_y) + pad * 2
+        )
+
+        # --- 本体 ---
+        col = (255, 100, 100) if is_active else self.color
+        pygame.draw.lines(
+            draw_surface,
+            col,
+            False,
+            self.points,
+            self.width
+        )
+
+        # --- 頂点描画 ---
+        if show_vertices:
+            for i, (x, y) in enumerate(self.points):
+                if is_active and active_vertex == i:
+                    pygame.draw.circle(
+                        draw_surface,
+                        (255, 0, 0),
+                        (int(x), int(y)),
+                        6
+                    )
+                else:
+                    pygame.draw.circle(
+                        draw_surface,
+                        (0, 0, 255),
+                        (int(x), int(y)),
+                        6
+                    )
+
+        # --- active 時の頂点番号 ---
+        if is_active and show_vertex_index:
+            for i, (x, y) in enumerate(self.points):
+                no_surf = font.render(str(i), True, (0, 0, 0))
+                rect = no_surf.get_rect(center=(x, y - 12))
+                draw_surface.blit(no_surf, rect)
+                dirty.append(rect)
+
+        dirty.append(area)
+        return dirty
+
+
+
 
 def add_rect(rects, active, pos, screen, context_menu=False):
     name = f"Rect{len(rects)+1}"
@@ -1255,7 +1094,7 @@ def add_polygon(polygons, active, pos, screen, context_menu=False):
     name = f"Polygon{len(polygons)+1}"
 
     if active is None:
-        points = [(100,100), (200,100), (200,200), (100,200)]
+        points = [(100,100), (200,100), (100,200), (100,200)]
 
     new = PolygonShape(
         points=points,

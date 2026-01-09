@@ -5,7 +5,7 @@ from config import (
     font_path, SCREEN_W, SCREEN_H, DRAW_W, DRAW_H, MENU_ITEMS_ADD_SHAPE
     )
 from objects import (
-    PolygonShape, ContextMenu, ShapeCache, Shape, Line, Polygon, ShapeManager, RotatingRect, TextLabel, DataManager, 
+    PolygonShape, ContextMenu, RotatingRect, TextLabel, DataManager, 
     add_rect, add_polygon
     )
 from object_editor import confirm_quit ,edit_object_window, edit_all_objects_window, show_power_table_with_category
@@ -18,7 +18,7 @@ from utils import (
 # -----------------------------
 # マップ表示モード
 # -----------------------------
-def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
+def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     """マップ表示用モード"""
     DRAW_W, DRAW_H = 1920, 1080  # 内部描画解像度（固定）
     draw_surface = pygame.Surface((DRAW_W, DRAW_H))  # 内部用Surface
@@ -36,9 +36,6 @@ def run_map_mode(screen, font, rects, texts, categories, shapes, filename):
         ]
     if not categories:
         categories = []
-    if not shapes:
-        shapes = []
-    polygons = []
     if not polygons:
         polygons = []
 
