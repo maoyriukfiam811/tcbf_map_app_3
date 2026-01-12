@@ -119,6 +119,10 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         now = pygame.time.get_ticks() / 1000.0
 
 
+        # ---- 内部Surfaceにすべて描画 ----
+        if need_redraw:
+            draw_surface.blit(background_layer, (0,0))
+
         # # ---- 内部Surfaceにすべて描画 ----
         # if need_redraw:
         #     draw_surface.blit(background_layer, (0,0))
@@ -787,13 +791,11 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     action = context_menu.handle_event(event) #返値は追加アクション名 / 例："add_rect"
                     if action:
                         if action == "add_rect":
-                            active = None
                             new = add_rect(rects, active, temporary_pos, screen, context_menu=True)
                             rects.append(new)
                             active = new
                     if action:
                         if action == "add_polygon":
-                            active = None
                             new = add_polygon(polygons, active, temporary_pos, screen, context_menu=True)
                             polygons.append(new)
                             active = new
@@ -884,10 +886,14 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
 
             elif event.type == pygame.MOUSEMOTION:
-                if active is not None and isinstance(active, PolygonShape) and active.dragging:
-                    dx, dy = drag_category_or_polygon(active, event.pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset=category_drag_offset)
-                    active.points = [(x+dx, y+dy) for (x,y) in active.points]
-
+                if active is not None:
+                    drag_object(
+                        active,
+                        event.pos,
+                        screen,
+                        SCREEN_W,
+                        SCREEN_H
+                    )
 
 
         # 内部解像度で全て描画したあと
