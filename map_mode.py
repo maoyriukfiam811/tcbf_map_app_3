@@ -12,7 +12,7 @@ from object_editor import confirm_quit ,edit_object_window, edit_all_objects_win
 from utils import (
     point_in_category, save_as_png, draw_background, load_and_resize_bg, drag_object, rotate_angle, 
     delete_object, undo_delete_object, categories_name_containing_rect, handle_key_movement, move_active_rects, load_bg_path,
-    categories_power_list, count_total_by_classification
+    categories_power_list, count_total_by_classification, drag_category_or_polygon, screen_to_internal, convert_mouse_to_draw_coords,
     )
 
 # -----------------------------
@@ -68,14 +68,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
     # shapes cache
     shape_layer = pygame.Surface((DRAW_W, DRAW_H), pygame.SRCALPHA)
-    shape_dirty = True
-
-    def rebuild_shape_layer():
-        shape_layer.fill((0, 0, 0, 0))
-        for s in shapes:
-            s.draw(shape_layer)
-
-    # shapes.append(new_shape)
 
     # 背景静的表示
     background_layer = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
@@ -122,8 +114,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     alert_cats = [c for c in categories if c.alert]
     show_alert = False
 
-    prev_dirty = []
-
     running = True
     while running:
         now = pygame.time.get_ticks() / 1000.0
@@ -133,16 +123,20 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         if need_redraw:
             draw_surface.blit(background_layer, (0,0))
 
-            if shape_dirty:
-                rebuild_shape_layer()
-                shape_dirty = False
-            draw_surface.blit(shape_layer, (0,0))
+        # # ---- 内部Surfaceにすべて描画 ----
+        # if need_redraw:
+        #     draw_surface.blit(background_layer, (0,0))
 
-            if show_category:
-                draw_surface.blit(category_layer, (0,0))
+        #     if shape_dirty:
+        #         rebuild_shape_layer()
+        #         shape_dirty = False
+        #     draw_surface.blit(shape_layer, (0,0))
 
-            pygame.display.flip()
-            need_redraw = False
+        #     if show_category:
+        #         draw_surface.blit(category_layer, (0,0))
+
+        #     pygame.display.flip()
+        #     need_redraw = False
 
         # カテゴリ描画（名前非表示）
         draw_surface.blit(background_layer, (0,0))
@@ -857,6 +851,28 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                                     active = None
                                     active_rects = []
 
+                for p in reversed(polygons):
+                    if p.contains_line(pos):
+                        active = p
+                        clicked = True
+                        p.dragging = True
+
+                        internal_pos = screen_to_internal(
+                            event.pos,
+                            screen.get_size(),
+                            (DRAW_W, DRAW_H)
+                        )
+
+                        category_drag_offset = (
+                            active.points[0][0] - internal_pos[0],
+                            active.points[0][1] - internal_pos[1]
+                        )
+                        break
+                    else:
+                        active = None
+                        active_rects = []
+
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 if isinstance(active, RotatingRect):    
                     for r in rects:
@@ -864,6 +880,11 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                 elif isinstance(active, TextLabel):
                     for t in texts:
                         t.dragging = False
+                elif isinstance(active, PolygonShape):
+                    for p in polygons:
+                        p.dragging = False
+
+
             elif event.type == pygame.MOUSEMOTION:
                 if active is not None:
                     drag_object(
