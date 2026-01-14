@@ -8,8 +8,7 @@ from abc import ABC, abstractmethod
 from os.path import basename
 from tkinter import filedialog
 from tkinter import colorchooser
-from utils import (get_rotated_rect_points, count_total_by_classification, categories_power_list, point_in_category, convert_mouse_to_draw_coords,
-                   point_to_segment_distance, hit_test_polyline)
+from utils import get_rotated_rect_points, count_total_by_classification, categories_power_list, point_in_category, convert_mouse_to_draw_coords
 from config import CATEGORIES_FILE, RECTS_FILE, font_path, SCREEN_W, SCREEN_H
 
 # -----------------------------
@@ -952,7 +951,7 @@ class RotatingRect:
 class PolygonShape:
     def __init__(
         self,
-        points=[(100,200), (200,100)],
+        points,
         color=(150, 200, 250),
         width=3,
         show_vertices=True,
@@ -961,13 +960,6 @@ class PolygonShape:
         self.color = tuple(color)
         self.width = width
         self.show_vertices = show_vertices
-        self.active = False
-        self.active_vertex = False
-        self.dragging = None
-        self.dragging_vertex = None
-        self.drag_offset = (0, 0)
-        self.vertex_drag_offset = (0, 0)
-        self.classification = "polygon"
 
         self.visible = True
         self.prev_dirty = []
@@ -991,25 +983,12 @@ class PolygonShape:
             show_vertices=d.get("show_vertices", True),
         )
 
-    def contains_line(self, pos, tolerance=6):
-        """辺クリック判定（ポリゴン）"""
-        if len(self.points) < 2:
-            return False
 
-        for i in range(len(self.points)):
-            p1 = self.points[i]
-            p2 = self.points[(i + 1) % len(self.points)]
-            if point_to_segment_distance(pos, p1, p2) <= tolerance:
-                return True
-
-        return False
-    
     def draw_polygon(
         self,
         draw_surface,
         is_active=False,
         active_vertex=None,
-        selected_vertex=None,
         show_vertices=None,
         show_vertex_index=False,
     ):
@@ -1046,30 +1025,27 @@ class PolygonShape:
         )
 
         # --- 頂点描画 ---
-        if show_vertices and is_active:
-            selected_vi = None
-            if selected_vertex:
-                pi, selected_vi = selected_vertex
-
+        if show_vertices:
             for i, (x, y) in enumerate(self.points):
-                # 色決定
-                if selected_vi is not None and i == selected_vi:
-                    color = (255, 0, 0)  # 選択頂点：赤
+                if is_active and active_vertex == i:
+                    pygame.draw.circle(
+                        draw_surface,
+                        (255, 0, 0),
+                        (int(x), int(y)),
+                        6
+                    )
                 else:
-                    color = (0, 0, 255)  # 通常頂点：青
-
-                pygame.draw.circle(
-                    draw_surface,
-                    color,
-                    (int(x), int(y)),
-                    6
-                )
-                    
+                    pygame.draw.circle(
+                        draw_surface,
+                        (0, 0, 255),
+                        (int(x), int(y)),
+                        6
+                    )
 
         # --- active 時の頂点番号 ---
         if is_active and show_vertex_index:
             for i, (x, y) in enumerate(self.points):
-                no_surf = font_path.render(str(i), True, (0, 0, 0))
+                no_surf = font.render(str(i), True, (0, 0, 0))
                 rect = no_surf.get_rect(center=(x, y - 12))
                 draw_surface.blit(no_surf, rect)
                 dirty.append(rect)
@@ -1078,23 +1054,8 @@ class PolygonShape:
         return dirty
 
 
-    def contains_line(self, pos, tolerance=6):
-        """辺クリック判定（ポリゴン）"""
-        if len(self.points) < 2:
-            return False
-
-        for i in range(len(self.points)):
-            p1 = self.points[i]
-            p2 = self.points[(i + 1) % len(self.points)]
-            if point_to_segment_distance(pos, p1, p2) <= tolerance:
-                return True
-
-        return False
 
 
-#-----------------------
-# 新規オブジェクト追加関数 右クリックウィンドウからの追加用
-#-----------------------
 def add_rect(rects, active, pos, screen, context_menu=False):
     name = f"Rect{len(rects)+1}"
 
@@ -1132,10 +1093,8 @@ def add_rect(rects, active, pos, screen, context_menu=False):
 def add_polygon(polygons, active, pos, screen, context_menu=False):
     name = f"Polygon{len(polygons)+1}"
 
-    mx, my = convert_mouse_to_draw_coords(pos, screen)
-
     if active is None:
-        points = [(mx, my), (mx+100, my+100)]
+        points = [(100,100), (200,100), (100,200), (100,200)]
 
     new = PolygonShape(
         points=points,

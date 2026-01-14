@@ -471,7 +471,7 @@ def calc_vertex_drag_offset(vertex_pos, mouse_pos_internal):
     ix, iy = mouse_pos_internal
     return vx - ix, vy - iy
 
-def calc_category_or_polygon_drag_offset(category, mouse_pos_internal):
+def calc_category_drag_offset(category, mouse_pos_internal):
     """
     category : CategoryShape
     """

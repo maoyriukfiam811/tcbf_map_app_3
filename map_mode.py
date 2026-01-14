@@ -13,7 +13,6 @@ from utils import (
     point_in_category, save_as_png, draw_background, load_and_resize_bg, drag_object, rotate_angle, 
     delete_object, undo_delete_object, categories_name_containing_rect, handle_key_movement, move_active_rects, load_bg_path,
     categories_power_list, count_total_by_classification, drag_category_or_polygon, screen_to_internal, convert_mouse_to_draw_coords,
-    handle_category_movement, handle_vertex_movement, get_active_point_index, drag_vertex
     )
 
 # -----------------------------
@@ -122,6 +121,10 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         now = pygame.time.get_ticks() / 1000.0
 
 
+        # ---- 内部Surfaceにすべて描画 ----
+        if need_redraw:
+            draw_surface.blit(background_layer, (0,0))
+
         # # ---- 内部Surfaceにすべて描画 ----
         # if need_redraw:
         #     draw_surface.blit(background_layer, (0,0))
@@ -169,8 +172,7 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
             is_active = (poly == active)
             new_dirty = poly.draw_polygon(
                 draw_surface,
-                is_active=is_active,
-                selected_vertex=selected_vertex,
+                is_active=is_active
             )
             dirty.extend(new_dirty)
             poly.prev_dirty = new_dirty
@@ -891,9 +893,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     pos = None  # クリック無効領域
 
 
-                if event.button == 1:
-                    selected_vertex = get_active_point_index(pos, polygons)
-
                 # 右クリックでメニュー生成
                 if event.button == 3:
                     temporary_pos = event.pos
@@ -905,13 +904,11 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     action = context_menu.handle_event(event) #返値は追加アクション名 / 例："add_rect"
                     if action:
                         if action == "add_rect":
-                            active = None
                             new = add_rect(rects, active, temporary_pos, screen, context_menu=True)
                             rects.append(new)
                             active = new
                     if action:
                         if action == "add_polygon":
-                            active = None
                             new = add_polygon(polygons, active, temporary_pos, screen, context_menu=True)
                             polygons.append(new)
                             active = new
@@ -1002,38 +999,14 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
 
             elif event.type == pygame.MOUSEMOTION:
-                if active is not None and isinstance(active, PolygonShape) and active.dragging:
-
-                    # --- 頂点ドラッグ ---
-                    if selected_vertex is not None:
-                        pi, vi = selected_vertex
-
-                        dx, dy = drag_vertex(
-                            active,
-                            vi,
-                            event.pos,
-                            screen,
-                            DRAW_W, DRAW_H,
-                            SCREEN_W, SCREEN_H,
-                            offset=active.vertex_drag_offset
-                        )
-
-                        x, y = active.points[vi]
-                        active.points[vi] = (x + dx, y + dy)
-
-                    # --- ポリゴン全体ドラッグ ---
-                    else:
-                        dx, dy = drag_category_or_polygon(
-                            active,
-                            event.pos,
-                            screen,
-                            DRAW_W, DRAW_H,
-                            SCREEN_W, SCREEN_H,
-                            offset=active.drag_offset
-                        )
-
-                        active.points = [(x + dx, y + dy) for (x, y) in active.points]
-
+                if active is not None:
+                    drag_object(
+                        active,
+                        event.pos,
+                        screen,
+                        SCREEN_W,
+                        SCREEN_H
+                    )
 
 
         # 内部解像度で全て描画したあと
