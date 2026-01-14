@@ -8,11 +8,12 @@ from objects import (
     PolygonShape, ContextMenu, RotatingRect, TextLabel, DataManager, 
     add_rect, add_polygon
     )
-from object_editor import confirm_quit ,edit_object_window, edit_all_objects_window, show_power_table_with_category
+from object_editor import confirm_quit ,edit_object_window, edit_all_objects_window, show_power_table_with_category, edit_polygon_window
 from utils import (
     point_in_category, save_as_png, draw_background, load_and_resize_bg, drag_object, rotate_angle, 
     delete_object, undo_delete_object, categories_name_containing_rect, handle_key_movement, move_active_rects, load_bg_path,
     categories_power_list, count_total_by_classification, drag_category_or_polygon, screen_to_internal, convert_mouse_to_draw_coords,
+    handle_category_movement, handle_vertex_movement, get_active_point_index, drag_vertex
     )
 
 # -----------------------------
@@ -48,6 +49,8 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     hide_texts = False # テキスト表示
     hide_until = 0 # テキスト非表示終了時間
     show_category = True
+    selected_vertex = None
+
     need_redraw = False
     ime_warned_message_until = 0 #日本語入力時警告
     export_message_until = 0 # 保存メッセージ表示終了時間
@@ -166,7 +169,8 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
             is_active = (poly == active)
             new_dirty = poly.draw_polygon(
                 draw_surface,
-                is_active=is_active
+                is_active=is_active,
+                selected_vertex=selected_vertex,
             )
             dirty.extend(new_dirty)
             poly.prev_dirty = new_dirty
@@ -214,6 +218,21 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     now, last_move_time, move_delay, keys, prev_keys, ctrl, shift, x, y, w=SCREEN_W, h=SCREEN_H
                 )
                 active.position = (x, y)
+
+            elif isinstance(active, PolygonShape):
+                if selected_vertex is not None:
+                    pi, vi = selected_vertex
+                    x, y = polygons[int(pi)].points[int(vi)]
+                    dx, dy, new_x, new_y, last_move_time = handle_vertex_movement(
+                        x, y, now, last_move_time, move_delay,
+                        keys, prev_keys, ctrl, shift, step=5, w=SCREEN_W, h=SCREEN_H)
+                    polygons[int(pi)].points[vi] = (new_x, new_y)
+
+                else:
+                    pi = polygons.index(active)
+                    last_move_time = handle_category_movement(
+                        polygons[pi], now, last_move_time, move_delay,
+                        keys, prev_keys, ctrl, shift)                
 
         elif active_rects:
             last_move_time = move_active_rects(active, active_rects,now, last_move_time, move_delay, keys, prev_keys, ctrl, shift, SCREEN_W, SCREEN_H)
@@ -537,20 +556,21 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     rects = objs
 
                 # EDIT_OBJECT_WINDOW
-                if active and event.key == pygame.K_RETURN:
-                    edit_object_window_results = edit_object_window(active)
+                if isinstance(active, RotatingRect):    
+                    if active and event.key == pygame.K_RETURN:
+                        edit_object_window_results = edit_object_window(active)
 
-                    for i in range(len(edit_object_window_results)):
-                        active.no = edit_object_window_results["no"]
-                        active.name = edit_object_window_results["name"]
-                        active.text = edit_object_window_results["text"]
-                        active.center = edit_object_window_results["center"]
-                        active.position = edit_object_window_results["position"]
-                        active.color = edit_object_window_results["color"]
-                        active.classification = edit_object_window_results["classification"]
-                        active.power = edit_object_window_results["power"]
-                        active.tent = edit_object_window_results["tent"]
-                        active.light = edit_object_window_results["light"]
+                        for i in range(len(edit_object_window_results)):
+                            active.no = edit_object_window_results["no"]
+                            active.name = edit_object_window_results["name"]
+                            active.text = edit_object_window_results["text"]
+                            active.center = edit_object_window_results["center"]
+                            active.position = edit_object_window_results["position"]
+                            active.color = edit_object_window_results["color"]
+                            active.classification = edit_object_window_results["classification"]
+                            active.power = edit_object_window_results["power"]
+                            active.tent = edit_object_window_results["tent"]
+                            active.light = edit_object_window_results["light"]
 
                 if event.key == pygame.K_h:
                     # HIDE INFO TEXT for 5 seconds
@@ -709,6 +729,10 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     if event.key == pygame.K_DELETE:
                         delete_object(active, rects)
                         active = None
+                if not active and not active_rects:
+                    if event.key == pygame.K_TAB:
+                        active = rects[0]
+
 
                 # --- TextLabel IS ACTIVE ---
                 if isinstance(active, TextLabel):
@@ -752,10 +776,101 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                             delete_object(active, texts)
                             active = None
 
-                if not active and not active_rects:
-                    if event.key == pygame.K_TAB:
-                        active = rects[0]
+                # --- PolygonShape IS ACTIVE ---
+                if isinstance(active, PolygonShape):
 
+                    # 削除
+                    if event.key == pygame.K_DELETE:
+                        delete_object(active, polygons)
+                        active = None
+                        selected_vertex = None
+
+                    # 頂点選択トグル（SPACE）
+                    elif event.key == pygame.K_SPACE:
+                        if selected_vertex is None:
+                            pi = polygons.index(active)
+                            selected_vertex = (pi, 0)  # 最初の頂点を選択
+                        else:
+                            selected_vertex = None
+                        
+                    elif event.key == pygame.K_TAB:
+                        pi = polygons.index(active)
+
+                        # 頂点選択がある → 頂点移動（従来どおり）
+                        if selected_vertex is not None:
+                            poly = polygons[pi]
+                            _, vi = selected_vertex
+
+                            if shift:
+                                vi = (vi - 1) % len(poly.points)
+                            else:
+                                vi = (vi + 1) % len(poly.points)
+
+                            selected_vertex = (pi, vi)
+
+                        # 頂点未選択 → ポリゴン切り替え
+                        else:
+                            if shift:
+                                pi = (pi - 1) % len(polygons)
+                            else:
+                                pi = (pi + 1) % len(polygons)
+
+                            active = polygons[pi]
+                            selected_vertex = None
+                        
+                    
+                    # 頂点削除（Dキー）
+                    elif event.key == pygame.K_d:
+                        if selected_vertex is not None:
+                            pi, vi = selected_vertex
+                            poly = polygons[pi]
+
+                            # 最低2頂点は維持
+                            if len(poly.points) > 2:
+                                poly.points.pop(vi)
+
+                                # 削除後の選択頂点調整
+                                if vi >= len(poly.points):
+                                    vi = len(poly.points) - 1
+
+                                selected_vertex = (pi, vi)
+                            else:
+                                # 削除不可（必要ならログ）
+                                print("Polygon must have at least 2 vertices.")
+                                pass
+
+                    # 頂点追加（Nキー）
+                    elif event.key == pygame.K_n:
+                        pi = polygons.index(active)
+                        poly = polygons[pi]
+
+                        # 基準頂点を決定
+                        if selected_vertex is not None:
+                            _, vi = selected_vertex
+                        else:
+                            vi = 0  # points[0]
+
+                        x, y = poly.points[vi]
+                        new_point = (x + 30, y)
+
+                        # 右隣に挿入
+                        poly.points.insert(vi + 1, new_point)
+
+                        # 追加した点を選択状態に
+                        selected_vertex = (pi, vi + 1)
+
+                    # 編集ウィンドウ表示（ENTERキー）
+                    elif event.key == pygame.K_RETURN:
+                        edit_polygon_window(active)
+
+                    # アクティブ解除（ESCキー）
+                    elif event.key == pygame.K_ESCAPE:
+                        if selected_vertex is not None:
+                            # 頂点選択解除
+                            selected_vertex = None
+                        else:
+                            # ポリゴン選択解除
+                            active = None
 
             # マウスクリック処理
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -775,6 +890,9 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                 else:
                     pos = None  # クリック無効領域
 
+
+                if event.button == 1:
+                    selected_vertex = get_active_point_index(pos, polygons)
 
                 # 右クリックでメニュー生成
                 if event.button == 3:
@@ -885,8 +1003,36 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
             elif event.type == pygame.MOUSEMOTION:
                 if active is not None and isinstance(active, PolygonShape) and active.dragging:
-                    dx, dy = drag_category_or_polygon(active, event.pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset=category_drag_offset)
-                    active.points = [(x+dx, y+dy) for (x,y) in active.points]
+
+                    # --- 頂点ドラッグ ---
+                    if selected_vertex is not None:
+                        pi, vi = selected_vertex
+
+                        dx, dy = drag_vertex(
+                            active,
+                            vi,
+                            event.pos,
+                            screen,
+                            DRAW_W, DRAW_H,
+                            SCREEN_W, SCREEN_H,
+                            offset=active.vertex_drag_offset
+                        )
+
+                        x, y = active.points[vi]
+                        active.points[vi] = (x + dx, y + dy)
+
+                    # --- ポリゴン全体ドラッグ ---
+                    else:
+                        dx, dy = drag_category_or_polygon(
+                            active,
+                            event.pos,
+                            screen,
+                            DRAW_W, DRAW_H,
+                            SCREEN_W, SCREEN_H,
+                            offset=active.drag_offset
+                        )
+
+                        active.points = [(x + dx, y + dy) for (x, y) in active.points]
 
 
 

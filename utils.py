@@ -274,17 +274,17 @@ def draw_background(screen, bg_image):
 # -----------------
 # category_mode用
 # -----------------
-def get_active_category_index(pt, categories):
+def get_active_polygon_index(pt, polygons):
     """
     クリック点 pt が含まれるカテゴリのインデックスを返す
     先に見つかったカテゴリを返す（重なり時は上のカテゴリ優先）
     """
-    for i, cat in enumerate(categories):
+    for i, cat in enumerate(polygons):
         if point_in_category(pt, cat):
             return i  # カテゴリのインデックスを返す
     return None
 
-def get_active_point_index(pt, categories, radius=8):
+def get_active_point_index(pt, polygons, radius=10):
     """
     クリック点 pt が近い頂点のインデックスを返す。
     先に見つかった頂点を返す（重なり時は上のカテゴリ・上の頂点優先）。
@@ -293,7 +293,7 @@ def get_active_point_index(pt, categories, radius=8):
         (si, vi) または None
     """
     px, py = pt
-    for si, cat in enumerate(categories):
+    for si, cat in enumerate(polygons):
         for vi, (vx, vy) in enumerate(cat.points):
             dx = px - vx
             dy = py - vy
@@ -408,18 +408,18 @@ def drag_category_or_polygon(category, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN
 
     return dx, dy
 
-def drag_vertex(category, vi, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset):
+def drag_vertex(polygon, vi, mouse_pos, screen, DRAW_W, DRAW_H, SCREEN_W, SCREEN_H, offset):
     """
     単一頂点のドラッグ移動量(dx, dy)を返す。
     convert_mouse_to_draw_coords を使わず、drag_object と同じ変換方式。
     """
 
-    if not category.points:
+    if not polygon.points:
         return 0, 0
 
     ox, oy = offset
     # --- 現在の頂点座標 ---
-    x0, y0 = category.points[vi]
+    x0, y0 = polygon.points[vi]
 
     # --- 画面→内部座標変換（drag_object と同じ） ---
     sw, sh = screen.get_size()
@@ -471,7 +471,7 @@ def calc_vertex_drag_offset(vertex_pos, mouse_pos_internal):
     ix, iy = mouse_pos_internal
     return vx - ix, vy - iy
 
-def calc_category_drag_offset(category, mouse_pos_internal):
+def calc_category_or_polygon_drag_offset(category, mouse_pos_internal):
     """
     category : CategoryShape
     """

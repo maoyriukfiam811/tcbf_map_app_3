@@ -962,10 +962,11 @@ class PolygonShape:
         self.width = width
         self.show_vertices = show_vertices
         self.active = False
-        self.active_vertex = None
+        self.active_vertex = False
         self.dragging = None
         self.dragging_vertex = None
         self.drag_offset = (0, 0)
+        self.vertex_drag_offset = (0, 0)
         self.classification = "polygon"
 
         self.visible = True
@@ -1008,6 +1009,7 @@ class PolygonShape:
         draw_surface,
         is_active=False,
         active_vertex=None,
+        selected_vertex=None,
         show_vertices=None,
         show_vertex_index=False,
     ):
@@ -1044,22 +1046,25 @@ class PolygonShape:
         )
 
         # --- 頂点描画 ---
-        if show_vertices:
+        if show_vertices and is_active:
+            selected_vi = None
+            if selected_vertex:
+                pi, selected_vi = selected_vertex
+
             for i, (x, y) in enumerate(self.points):
-                if is_active and active_vertex == i:
-                    pygame.draw.circle(
-                        draw_surface,
-                        (255, 0, 0),
-                        (int(x), int(y)),
-                        6
-                    )
+                # 色決定
+                if selected_vi is not None and i == selected_vi:
+                    color = (255, 0, 0)  # 選択頂点：赤
                 else:
-                    pygame.draw.circle(
-                        draw_surface,
-                        (0, 0, 255),
-                        (int(x), int(y)),
-                        6
-                    )
+                    color = (0, 0, 255)  # 通常頂点：青
+
+                pygame.draw.circle(
+                    draw_surface,
+                    color,
+                    (int(x), int(y)),
+                    6
+                )
+                    
 
         # --- active 時の頂点番号 ---
         if is_active and show_vertex_index:
