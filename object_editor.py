@@ -810,6 +810,91 @@ def show_power_table_with_category(rects, categories, point_in_category):
     win.wait_window()
 
 
+# -----------------
+# ポリゴン編集ウィンドウ
+# -----------------
+def edit_polygon_window(poly):
+    root = tk.Tk()
+    root.withdraw()
+
+    win = tk.Toplevel(root)
+    win.title("ポリゴン編集")
+    win.geometry("360x180")
+
+    win.lift()
+    win.attributes("-topmost", True)
+    win.after(50, lambda: win.attributes("-topmost", False))
+    win.focus_force()
+
+    # -------------------------
+    # Color
+    # -------------------------
+    tk.Label(win, text="Color (r,g,b):").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+
+    color_entry = tk.Entry(win)
+    color_entry.insert(0, str(poly.color))
+    color_entry.grid(row=0, column=1, sticky="we", padx=5)
+
+    def pick_color():
+        c = colorchooser.askcolor(color=poly.color)
+        if c[0]:
+            rgb = tuple(int(v) for v in c[0])
+            color_entry.delete(0, tk.END)
+            color_entry.insert(0, str(rgb))
+
+    tk.Button(win, text="Pick", command=pick_color).grid(row=0, column=2, padx=5)
+
+    # -------------------------
+    # Width
+    # -------------------------
+    tk.Label(win, text="Line Width:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
+
+    width_entry = tk.Entry(win, width=5)
+    width_entry.insert(0, str(getattr(poly, "width", 1)))
+    width_entry.grid(row=1, column=1, sticky="w", padx=5)
+
+    # -------------------------
+    # Save / Cancel
+    # -------------------------
+    def save():
+        # color
+        entry_color = color_entry.get().replace("(", "").replace(")", "")
+        parts = [p for p in entry_color.replace(",", " ").split() if p]
+        try:
+            color = tuple(map(int, parts))
+            if len(color) == 3:
+                poly.color = color
+        except Exception:
+            pass
+
+        # width
+        try:
+            poly.width = int(width_entry.get())
+        except Exception:
+            pass
+
+        win.destroy()
+
+    def not_save():
+        win.destroy()
+
+    tk.Button(win, text="保存", command=save).grid(row=2, column=0, pady=10)
+    tk.Button(win, text="キャンセル", command=not_save).grid(row=2, column=1, pady=10)    
+
+    # -------------------------
+    # Key bindings
+    # -------------------------
+    win.bind("<Return>", lambda event: save())
+    win.bind("<Escape>", lambda event: not_save())
+    win.protocol("WM_DELETE_WINDOW", not_save)
+
+    win.grid_columnconfigure(1, weight=1)
+
+    # ★ pygame 併用時に必須
+    root.wait_window(win)
+    root.destroy()
+
+
 # ---------------
 # カテゴリモード用
 # ---------------
