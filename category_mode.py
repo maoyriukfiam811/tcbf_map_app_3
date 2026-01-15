@@ -396,6 +396,12 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                         (DRAW_W, DRAW_H)
                     )
 
+                    internal_pos = screen_to_internal(
+                        event.pos,
+                        screen.get_size(),
+                        (DRAW_W, DRAW_H)
+                    )
+
                     if selected_vertex is not None:
                         dragging = True
                         selected_cat = ci
