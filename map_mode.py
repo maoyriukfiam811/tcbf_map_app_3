@@ -6,7 +6,7 @@ from config import (
     )
 from objects import (
     PolygonShape, ContextMenu, RotatingRect, TextLabel, DataManager, 
-    add_rect, add_polygon
+    add_rect, add_polygon, add_text
     )
 from object_editor import confirm_quit ,edit_object_window, edit_all_objects_window, show_power_table_with_category, edit_polygon_window
 from utils import (
@@ -121,22 +121,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     while running:
         now = pygame.time.get_ticks() / 1000.0
 
-
-        # # ---- 内部Surfaceにすべて描画 ----
-        # if need_redraw:
-        #     draw_surface.blit(background_layer, (0,0))
-
-        #     if shape_dirty:
-        #         rebuild_shape_layer()
-        #         shape_dirty = False
-        #     draw_surface.blit(shape_layer, (0,0))
-
-        #     if show_category:
-        #         draw_surface.blit(category_layer, (0,0))
-
-        #     pygame.display.flip()
-        #     need_redraw = False
-
         # カテゴリ描画（名前非表示）
         draw_surface.blit(background_layer, (0,0))
         draw_surface.blit(shape_layer, (0,0))
@@ -180,8 +164,10 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         pygame.display.update(dirty)
 
         ### 確認用 ###
-        # draw_surface.blit(font_small.render(f"len(active_rects):, {len(active_rects)}", True, (0,0,0)), (10, 300))
+        # if isinstance(active, PolygonShape):
+        #     draw_surface.blit(font_small.render(f"active.dragging:, {active.dragging_vertex}", True, (0,0,0)), (10, 300))
         # draw_surface.blit(font_small.render(f"active:, {active}", True, (0,0,0)), (10, 320))
+        # draw_surface.blit(font_small.render(f"selected_vertex:, {selected_vertex}", True, (0,0,0)), (10, 340))
 
         # テキスト描画
         for t in texts:
@@ -250,12 +236,12 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         if hide_texts:
             None
         elif not hide_texts:
-        # elif not hide:
 
             # --- 操作説明表示 ---
             if active is None:
                 instructions = [
                     "クリック: オブジェクト選択",
+                    "右クリック: 四角、ポリゴン追加メニュー表示（円未実装）",
                     "Ctrl+クリック: オブジェクト複数選択",
                     "ドラッグ: オブジェクト移動",
                     "N: 四角新規追加",
@@ -312,6 +298,18 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     # "ESC: 保存して戻る",
                     # "Ctrl+P: pngとして保存",
                     # "Ctrl+H: 操作説明非表示5秒間",
+                ]
+
+            elif isinstance(active, PolygonShape):
+                instructions = [
+                    "ドラッグ, 矢印キー: 移動",
+                    "Shift+矢印キー: 10px移動",
+                    "Ctrl+矢印キー: 50px移動",
+                    "頂点ドラッグ: 頂点移動",
+                    "Enter: 線太さ、色編集",
+                    "D: アクティブ頂点削除",
+                    "Delete: ポリゴン削除",
+                    "N: 頂点追加",
                 ]
 
 
@@ -872,157 +870,155 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                             # ポリゴン選択解除
                             active = None
 
+
             # マウスクリック処理
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                sw, sh = screen.get_size()
-                scale = min(sw / DRAW_W, sh / DRAW_H)
-                scaled_w = int(DRAW_W * scale)
-                scaled_h = int(DRAW_H * scale)
-                offset_x = (sw - scaled_w) // 2
-                offset_y = (sh - scaled_h) // 2
 
-                mx, my = event.pos
-                # 黒帯外なら無視
-                if offset_x <= mx < offset_x + scaled_w and offset_y <= my < offset_y + scaled_h:
-                    sx = (mx - offset_x) / scale
-                    sy = (my - offset_y) / scale
-                    pos = (sx, sy)
-                else:
-                    pos = None  # クリック無効領域
-
-
+                # ==================================================
+                # 1 マウス座標を描画座標に変換
+                # ==================================================
                 if event.button == 1:
-                    selected_vertex = get_active_point_index(pos, polygons)
 
-                # 右クリックでメニュー生成
-                if event.button == 3:
-                    temporary_pos = event.pos
-                    context_menu = ContextMenu(MENU_ITEMS_ADD_SHAPE, event.pos) # ここで右クリックによる形状追加itemsを渡す
-                    continue
+                    internal_pos = screen_to_internal(
+                        event.pos,
+                        screen.get_size(),
+                        (DRAW_W, DRAW_H)
+                    )
 
-                # メニューがある場合は最優先で処理
+                # ==================================================
+                # 2 ContextMenu が出ている場合は最優先
+                # ==================================================
                 if context_menu:
-                    action = context_menu.handle_event(event) #返値は追加アクション名 / 例："add_rect"
+                    action = context_menu.handle_event(event)
                     if action:
                         if action == "add_rect":
                             active = None
                             new = add_rect(rects, active, temporary_pos, screen, context_menu=True)
                             rects.append(new)
                             active = new
-                    if action:
-                        if action == "add_polygon":
+
+                        elif action == "add_text":
+                            active = None
+                            new = add_text(texts, active, temporary_pos, screen, context_menu=True)
+                            texts.append(new)
+                            active = new
+
+                        elif action == "add_polygon":
                             active = None
                             new = add_polygon(polygons, active, temporary_pos, screen, context_menu=True)
                             polygons.append(new)
                             active = new
+
                     if not context_menu.visible:
                         context_menu = None
+
                     continue
 
-                    
-                # 四角形選択・ドラッグ開始
-                for r in reversed(rects): # 手前の四角形から優先的に選択
-                    # 複数アクティブ
-                    if ctrl:
-                        if r.contains_point(pos):
-                            clicked_rect = r
-                            if clicked_rect in active_rects:
-                                active_rects.remove(clicked_rect)
-                            elif clicked_rect not in active_rects:
-                                if active == clicked_rect:
-                                    active_rects.append(clicked_rect)
-                                    active = None
-                                    for r in rects:
-                                        r.name_pos_active = False
-                                elif active:
-                                    active_rects.append(active)
-                                    active_rects.append(clicked_rect)
-                                    active = None
-                                    for r in rects:
-                                        r.name_pos_active = False
-                                elif active is None:
-                                    active_rects.append(clicked_rect)
-                        # else:
-                        #     None
-                 # 通常アクティブ
-                    else:
-                        if r.contains_point(pos):
-                            active = r
-                            r.dragging = True
-                            r.drag_offset = (r.center[0]-pos[0], r.center[1]-pos[1])
-                            clicked = True
-                            break
-                        else:
-                            r.name_pos_active = False
-                            active = None
-                            # テキスト選択・ドラッグ開始
-                            for t in reversed(texts): # 手前のテキストから優先的に選択
-                                if t.contains_point(pos, font_path):
-                                    active = t
-                                    t.dragging = True
-                                    t.drag_offset = (t.position[0]-pos[0], t.position[1]-pos[1])  
-                                    clicked = True
-                                    break
-                                else:
-                                    active = None
-                                    active_rects = []
+                # ==================================================
+                # ③ 右クリック：メニュー生成のみ
+                # ==================================================
+                if event.button == 3:
+                    temporary_pos = event.pos
+                    context_menu = ContextMenu(
+                        MENU_ITEMS_ADD_SHAPE,
+                        event.pos          # 表示用：スクリーン座標
+                    )
 
-                for p in reversed(polygons):
-                    if p.contains_line(pos):
-                        active = p
+                    continue
+
+
+                # ---- 頂点選択（最優先）----
+                if event.button == 1:
+                    (pi, vi) = get_active_point_index(internal_pos, polygons)
+                    selected_vertex = (pi, vi) if pi is not None and vi is not None else None
+                    if selected_vertex is not None:
+                        active = polygons[pi]
+
+                        active.dragging_polygon = True
+                        active.dragging_vertex = True
                         clicked = True
-                        p.dragging = True
-
-                        internal_pos = screen_to_internal(
-                            event.pos,
-                            screen.get_size(),
-                            (DRAW_W, DRAW_H)
-                        )
-
-                        category_drag_offset = (
-                            active.points[0][0] - internal_pos[0],
-                            active.points[0][1] - internal_pos[1]
-                        )
                         break
-                    else:
+
+                    # ---- 四角形選択 ----
+                    if not clicked:
+                        for r in reversed(rects):
+                            if r.contains_point(internal_pos):
+                                active = r
+                                r.dragging = True
+                                clicked = True
+                                break
+
+                    # ---- テキスト選択 ----
+                    if not clicked:
+                        for t in reversed(texts):
+                            if t.contains_point(internal_pos, font_path):
+                                active = t
+                                t.dragging = True
+                                clicked = True
+                                break
+
+
+                    # ---- ポリゴン選択 ----
+                    if not clicked:
+                        for p in reversed(polygons):
+                            if p.contains_line(internal_pos):
+                                active = p
+                                p.dragging_polygon = True
+                                p.dragging_vertex = False
+                                p.drag_offset = (
+                                    p.points[0][0] - internal_pos[0],
+                                    p.points[0][1] - internal_pos[1]
+                                )
+                                clicked = True
+                                break
+
+                    # ---- 何も選択されなかった場合のみ解除 ----
+                    if not clicked:
+                        for r in rects:
+                            r.dragging = False
+                        for t in texts:
+                            t.dragging = False
+                        for p in polygons:
+                            p.stop_dragging()
                         active = None
+                        selected_vertex = None
                         active_rects = []
 
 
+
+
             elif event.type == pygame.MOUSEBUTTONUP:
-                if isinstance(active, RotatingRect):    
-                    for r in rects:
-                        r.dragging = False
-                elif isinstance(active, TextLabel):
-                    for t in texts:
-                        t.dragging = False
-                elif isinstance(active, PolygonShape):
-                    for p in polygons:
-                        p.dragging = False
+                clicked = False
+                for r in rects:
+                    r.dragging = False
+                for t in texts:
+                    t.dragging = False
+                for p in polygons:
+                    p.stop_dragging()
 
 
             elif event.type == pygame.MOUSEMOTION:
-                if active is not None and isinstance(active, PolygonShape) and active.dragging:
+                internal_pos = screen_to_internal(
+                    event.pos,
+                    screen.get_size(),
+                    (DRAW_W, DRAW_H)
+                )
 
-                    # --- 頂点ドラッグ ---
-                    if selected_vertex is not None:
-                        pi, vi = selected_vertex
-
-                        dx, dy = drag_vertex(
+                if isinstance(active, RotatingRect) or isinstance(active, TextLabel):
+                    if active and active.dragging:
+                        drag_object(
                             active,
-                            vi,
                             event.pos,
                             screen,
-                            DRAW_W, DRAW_H,
-                            SCREEN_W, SCREEN_H,
-                            offset=active.vertex_drag_offset
+                            SCREEN_W, SCREEN_H
                         )
 
-                        x, y = active.points[vi]
-                        active.points[vi] = (x + dx, y + dy)
-
-                    # --- ポリゴン全体ドラッグ ---
-                    else:
+                if isinstance(active, PolygonShape):
+                    # ---- 頂点ドラッグ ----
+                    if active.dragging_vertex and selected_vertex:
+                        active.points[selected_vertex[1]] = internal_pos
+                    # ---- ポリゴン全体 ----
+                    elif active.dragging_polygon:
                         dx, dy = drag_category_or_polygon(
                             active,
                             event.pos,
@@ -1063,3 +1059,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         pygame.display.flip()
 
         clock.tick(60) # FPS
+
+
+

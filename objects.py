@@ -47,7 +47,7 @@ class DataManager:
             "rects":      [r.to_dict() for r in rects],
             "texts":      [t.to_dict() for t in texts],
             "categories": [c.to_dict() for c in categories],
-            "polygons":     [s.to_dict() for s in polygons],
+            "polygons":   [p.to_dict() for p in polygons],
         }
 
         with open(filename, "w", encoding="utf-8") as f:
@@ -163,7 +163,6 @@ class ContextMenu:
 
                 if self.hover != -1:
                     label, action = self.items[self.hover]
-                    print("コンテキストメニュー選択:", label)
                     self.visible = False
                     return action
                 else:
@@ -419,6 +418,7 @@ class TextLabel:
         self.classification = classification
         self.power = power
         self.locked = locked
+        self.dragging = False
 
 
     def to_dict(self):
@@ -824,14 +824,26 @@ class RotatingRect:
         return int(self.tent) > 0
 
     def contains_point(self, p):
-        """クリック判定"""
-        if isinstance(self, RotatingRect):
-            if hasattr(self, "_last_rect") and self._last_rect:
-                return self._last_rect.collidepoint(p)
-            else:
-                dx = p[0] - self.center[0]
-                dy = p[1] - self.center[1]
-                return math.hypot(dx,dy) < max(self.size)*1.0
+        """内部座標系での四角形クリック判定（回転対応）"""
+        px, py = p
+        cx, cy = self.center
+        w, h = self.size
+        angle = -math.radians(self.angle)  # 逆回転
+
+        # 中心基準に移動
+        dx = px - cx
+        dy = py - cy
+
+        # 逆回転
+        rx = dx * math.cos(angle) - dy * math.sin(angle)
+        ry = dx * math.sin(angle) + dy * math.cos(angle)
+
+        # 軸平行矩形として判定
+        return (
+            -w / 2 <= rx <= w / 2 and
+            -h / 2 <= ry <= h / 2
+        )
+
 
     def get_categories(self, categories, point_in_category):
         """
@@ -963,14 +975,22 @@ class PolygonShape:
         self.show_vertices = show_vertices
         self.active = False
         self.active_vertex = False
-        self.dragging = None
-        self.dragging_vertex = None
+        self.dragging = False #使用しない
+        self.dragging_polygon = False
+        self.dragging_vertex = False
+        self.active_vertex = False
         self.drag_offset = (0, 0)
         self.vertex_drag_offset = (0, 0)
         self.classification = "polygon"
 
         self.visible = True
         self.prev_dirty = []
+
+    def stop_dragging(self):
+        self.dragging = False
+        self.dragging_polygon = False
+        self.dragging_vertex = False
+        self.active_vertex = False
 
     def to_dict(self):
         """JSON保存用"""
@@ -990,19 +1010,6 @@ class PolygonShape:
             width=d.get("width", 3),
             show_vertices=d.get("show_vertices", True),
         )
-
-    def contains_line(self, pos, tolerance=6):
-        """辺クリック判定（ポリゴン）"""
-        if len(self.points) < 2:
-            return False
-
-        for i in range(len(self.points)):
-            p1 = self.points[i]
-            p2 = self.points[(i + 1) % len(self.points)]
-            if point_to_segment_distance(pos, p1, p2) <= tolerance:
-                return True
-
-        return False
     
     def draw_polygon(
         self,
@@ -1141,6 +1148,20 @@ def add_polygon(polygons, active, pos, screen, context_menu=False):
         points=points,
         color=(0,0,0),
         width=2,
+    )
+
+    return new
+
+def add_text(texts, active, pos, screen, context_menu=False):
+    no = len(texts)+1
+    name = f"Text{len(texts)+1}"
+
+    mx, my = convert_mouse_to_draw_coords(pos, screen)
+
+    new = TextLabel(
+        no=no,
+        text=name,
+        position=(mx, my)
     )
 
     return new

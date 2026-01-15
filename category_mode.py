@@ -19,7 +19,7 @@ from object_editor import confirm_quit, edit_category_dialog
 # -----------------------------
 # カテゴリ編集モード
 # -----------------------------
-def run_category_editor(screen, font, rects, texts, categories, shapes, filename):
+def run_category_editor(screen, font, rects, texts, categories, polygons, filename):
     """カテゴリ編集モード"""
     import tkinter as tk
     # root = tk.Tk()
@@ -178,7 +178,7 @@ def run_category_editor(screen, font, rects, texts, categories, shapes, filename
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 if confirm_quit():
-                    DataManager.save_all(rects, texts, categories, filename)
+                    DataManager.save_all(rects, texts, categories, polygons, filename)
                     return "back_to_mode_select"
                 else:
                     running = False
@@ -201,7 +201,7 @@ def run_category_editor(screen, font, rects, texts, categories, shapes, filename
                         selected_cat = None
                     else:
                         if confirm_quit():
-                            DataManager.save_all(rects, texts, categories, filename)
+                            DataManager.save_all(rects, texts, categories, polygons, filename)
                             return "back_to_mode_select"
                         else:
                             return "back_to_mode_select"
@@ -310,7 +310,7 @@ def run_category_editor(screen, font, rects, texts, categories, shapes, filename
 
                 # SAVE
                 if ctrl and event.key == pygame.K_s:
-                    DataManager.save_all(rects, texts, categories, filename)
+                    DataManager.save_all(rects, texts, categories, polygons, filename)
                     save_message_until = now + 3  # 今から3秒後
 
                 # 選択頂点削除
