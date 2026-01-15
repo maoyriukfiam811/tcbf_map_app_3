@@ -32,7 +32,7 @@ last_deleted_obj = None
 # 右クリックメニュー項目（形状追加）
 MENU_ITEMS_ADD_SHAPE = [
     ("Rectangle", "add_rect"),
-    ("Text",    "add_text"),
     ("Polygon",   "add_polygon"),
+    ("Circle",    "add_circle"),
 ]
 

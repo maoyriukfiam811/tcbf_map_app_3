@@ -842,7 +842,7 @@ def edit_polygon_window(poly):
             color_entry.delete(0, tk.END)
             color_entry.insert(0, str(rgb))
 
-    tk.Button(win, text="色変更", command=pick_color).grid(row=0, column=2, padx=5)
+    tk.Button(win, text="Pick", command=pick_color).grid(row=0, column=2, padx=5)
 
     # -------------------------
     # Width
