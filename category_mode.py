@@ -113,7 +113,7 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
             draw_surface.blit(text_surf, (x_offset, y_offset + i * 20))
 
         # --- アクティブオブジェクト情報表示 ---
-        if selected_vertex is not None: #単一選択
+        if selected_cat: #単一選択
             # category が1つもない
             if not categories:
                 return
@@ -386,7 +386,8 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                         continue # 追加後は他の処理をスキップ
 
                 if event.button == 1:  # 左クリック
-                    selected_vertex = get_active_point_index(pos, categories)
+                    (ci, vi) = get_active_point_index(pos, categories)
+                    selected_vertex = (ci, vi) if ci is not None and vi is not None else None
                     selected_cat = get_active_polygon_index(pos, categories)
 
                     internal_pos = screen_to_internal(
@@ -396,9 +397,9 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                     )
 
                     if selected_vertex is not None:
-                        ci, vi = selected_vertex
                         dragging = True
                         selected_cat = ci
+                        # if selected_cat is None:
 
                         vertex_drag_offset = calc_vertex_drag_offset(
                             categories[ci].points[vi],
