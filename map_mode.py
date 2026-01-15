@@ -870,6 +870,18 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                             # ポリゴン選択解除
                             active = None
 
+                    # 編集ウィンドウ表示（ENTERキー）
+                    elif event.key == pygame.K_RETURN:
+                        edit_polygon_window(active)
+
+                    # アクティブ解除（ESCキー）
+                    elif event.key == pygame.K_ESCAPE:
+                        if selected_vertex is not None:
+                            # 頂点選択解除
+                            selected_vertex = None
+                        else:
+                            # ポリゴン選択解除
+                            active = None
 
             # マウスクリック処理
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -889,7 +901,7 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                 # 2 ContextMenu が出ている場合は最優先
                 # ==================================================
                 if context_menu:
-                    action = context_menu.handle_event(event)
+                    action = context_menu.handle_event(event) #返値は追加アクション名 / 例："add_rect"
                     if action:
                         if action == "add_rect":
                             active = None
