@@ -296,7 +296,7 @@ def get_active_point_index(pt, polygons, radius=10):
         (si, vi) または None
     """
     px, py = pt
-    for si, cat in enumerate(polygons):
+    for pi, cat in enumerate(polygons):
         for vi, (vx, vy) in enumerate(cat.points):
             dx = px - vx
             dy = py - vy
@@ -474,7 +474,7 @@ def calc_vertex_drag_offset(vertex_pos, mouse_pos_internal):
     ix, iy = mouse_pos_internal
     return vx - ix, vy - iy
 
-def calc_category_drag_offset(category, mouse_pos_internal):
+def calc_category_or_polygon_drag_offset(category, mouse_pos_internal):
     """
     category : CategoryShape
     """

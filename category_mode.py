@@ -2,8 +2,8 @@ import pygame
 import tkinter as tk
 from tkinter import simpledialog
 from utils import (draw_background, load_and_resize_bg, load_bg_path, point_in_category, 
-                   get_active_point_index, get_active_category_index, drag_vertex, drag_category_or_polygon, handle_category_movement, handle_vertex_movement,
-                   screen_to_internal, calc_vertex_drag_offset, calc_category_drag_offset)
+                   get_active_point_index, get_active_polygon_index, drag_vertex, drag_category_or_polygon, handle_category_movement, handle_vertex_movement,
+                   screen_to_internal, calc_vertex_drag_offset, calc_category_or_polygon_drag_offset)
 from objects import CategoryShape, DataManager
 from config import font_path, SCREEN_W, SCREEN_H
 from object_editor import confirm_quit, edit_category_dialog
@@ -113,7 +113,7 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
             draw_surface.blit(text_surf, (x_offset, y_offset + i * 20))
 
         # --- アクティブオブジェクト情報表示 ---
-        if selected_vertex is not None: #単一選択
+        if selected_cat: #単一選択
             # category が1つもない
             if not categories:
                 return
@@ -386,8 +386,15 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                         continue # 追加後は他の処理をスキップ
 
                 if event.button == 1:  # 左クリック
-                    selected_vertex = get_active_point_index(pos, categories, radius=8)
-                    selected_cat = get_active_category_index(pos, categories)
+                    (ci, vi) = get_active_point_index(pos, categories)
+                    selected_vertex = (ci, vi) if ci is not None and vi is not None else None
+                    selected_cat = get_active_polygon_index(pos, categories)
+
+                    internal_pos = screen_to_internal(
+                        event.pos,
+                        screen.get_size(),
+                        (DRAW_W, DRAW_H)
+                    )
 
                     internal_pos = screen_to_internal(
                         event.pos,
@@ -396,9 +403,9 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                     )
 
                     if selected_vertex is not None:
-                        ci, vi = selected_vertex
                         dragging = True
                         selected_cat = ci
+                        # if selected_cat is None:
 
                         vertex_drag_offset = calc_vertex_drag_offset(
                             categories[ci].points[vi],
@@ -410,7 +417,7 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                         dragging = True
                         selected_vertex = None
 
-                        category_drag_offset = calc_category_drag_offset(
+                        category_drag_offset = calc_category_or_polygon_drag_offset(
                             categories[selected_cat],
                             internal_pos
                         )
