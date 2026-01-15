@@ -326,7 +326,7 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                 show_alert = False
 
             if show_alert:
-                alert_text = pygame.font.Font(font_path, 30).render(f"注意: {show_alert_text}", True, (255, 0, 0))
+                alert_text = pygame.font.Font(font_path, 20).render(f"注意: {show_alert_text}", True, (255, 0, 0))
                 w, h = draw_surface.get_size()
                 draw_surface.blit(alert_text, (w - alert_text.get_width() - 10, h - alert_text.get_height() - 10))
 
@@ -1041,7 +1041,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                         )
 
                         active.points = [(x + dx, y + dy) for (x, y) in active.points]
-
 
 
 

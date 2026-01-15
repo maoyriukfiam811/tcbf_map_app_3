@@ -1,0 +1,164 @@
+{
+  "rects": [
+    {
+      "no": "0",
+      "name": "testA",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": "0",
+      "center": [
+        320.0,
+        180.0
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        100,
+        200,
+        100
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": "0",
+      "light": "0"
+    },
+    {
+      "no": 0,
+      "name": "testB",
+      "name_pos": [
+        20,
+        -10
+      ],
+      "name_color": [
+        0,
+        0,
+        0
+      ],
+      "name_angle": 0,
+      "font_size": 15,
+      "power": 0,
+      "center": [
+        420,
+        240
+      ],
+      "size": [
+        25,
+        25
+      ],
+      "color": [
+        120,
+        180,
+        220
+      ],
+      "angle": 0,
+      "classification": "beer",
+      "tent": 0,
+      "light": 0
+    }
+  ],
+  "texts": [
+    {
+      "no": "0",
+      "text": "タイトル（削除不可）",
+      "position": [
+        10,
+        20
+      ],
+      "font_size": 20,
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "angle": 0,
+      "locked": true
+    }
+  ],
+  "categories": [],
+  "polygons": [
+    {
+      "points": [
+        [
+          984.0,
+          608.5
+        ],
+        [
+          1024.0,
+          608.5
+        ],
+        [
+          1079.5,
+          704.5
+        ]
+      ],
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "width": 2,
+      "show_vertices": true
+    },
+    {
+      "points": [
+        [
+          767.0,
+          435.5
+        ],
+        [
+          767.0,
+          400.5
+        ],
+        [
+          857.0,
+          550.5
+        ],
+        [
+          767.0,
+          400.5
+        ],
+        [
+          797.0,
+          400.5
+        ]
+      ],
+      "color": [
+        0,
+        0,
+        255
+      ],
+      "width": 6,
+      "show_vertices": true
+    },
+    {
+      "points": [
+        [
+          1113.0,
+          486.0
+        ],
+        [
+          1243.0,
+          576.0
+        ]
+      ],
+      "color": [
+        0,
+        0,
+        0
+      ],
+      "width": 4,
+      "show_vertices": true
+    }
+  ]
+}

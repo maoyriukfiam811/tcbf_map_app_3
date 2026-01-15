@@ -121,8 +121,6 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
             # selected_cat 補正
             if selected_cat < 0:
                 selected_cat = 0
-            elif selected_cat >= len(categories):
-                selected_cat = len(categories) - 1
 
             pts = categories[selected_cat].points
 
@@ -139,12 +137,13 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
             if vi is not None:
                 if vi < 0:
                     vi = 0
-                if vi >= len(categories[ci].points):
-                    vi = len(categories[ci].points) - 1
 
-
-            draw_surface.blit(font_small.render(f"name: {categories[selected_cat].name}", True, (0,0,0)), (10, 50)) #1行目
-            draw_surface.blit(font_small.render(f"point: {categories[selected_cat].points[vi]}", True, (0,0,0)), (10, 70)) #2行目以降
+            if selected_cat is not None and vi is None:
+                draw_surface.blit(font_small.render(f"name: {categories[selected_cat].name}", True, (0,0,0)), (10, 50)) #1行目
+                draw_surface.blit(font_small.render(f"point: None", True, (0,0,0)), (10, 70)) #2行目以降
+            if selected_cat is not None and vi is not None:
+                draw_surface.blit(font_small.render(f"name: {categories[selected_cat].name}", True, (0,0,0)), (10, 50)) #1行目
+                draw_surface.blit(font_small.render(f"point: {categories[selected_cat].points[vi]}", True, (0,0,0)), (10, 70)) #2行目以降
         else:
             None
 
@@ -389,12 +388,6 @@ def run_category_editor(screen, font, rects, texts, categories, polygons, filena
                     (ci, vi) = get_active_point_index(pos, categories)
                     selected_vertex = (ci, vi) if ci is not None and vi is not None else None
                     selected_cat = get_active_polygon_index(pos, categories)
-
-                    internal_pos = screen_to_internal(
-                        event.pos,
-                        screen.get_size(),
-                        (DRAW_W, DRAW_H)
-                    )
 
                     internal_pos = screen_to_internal(
                         event.pos,
