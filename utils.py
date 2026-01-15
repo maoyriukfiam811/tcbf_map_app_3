@@ -219,6 +219,8 @@ def select_background_file():
     root = tk.Tk()
     root.withdraw()
 
+    bg_path = load_bg_path()
+
     file_path = filedialog.askopenfilename(
         title="背景画像を選択",
         filetypes=[
@@ -229,18 +231,19 @@ def select_background_file():
 
     root.destroy()
 
-    if file_path:
-        # BG_FILE.json が無ければここで作成（あっても上書き）
-        save_bg_path(file_path)
-        return file_path
+    if not file_path:
+        return bg_path
 
-    return None
+    # BG_FILE.json が無ければここで作成（あっても上書き）
+    save_bg_path(file_path)
+    return file_path
+
 
 def load_bg_path():
     if os.path.exists(BG_FILE):
         with open(BG_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return data.get("path", None)
+        return data.get("path")
     return None
 
 def save_bg_path(path):
@@ -298,8 +301,8 @@ def get_active_point_index(pt, polygons, radius=10):
             dx = px - vx
             dy = py - vy
             if dx*dx + dy*dy <= radius**2:
-                return (si, vi)
-    return None
+                return (pi, vi)
+    return (None, None)
 
 
 def handle_vertex_movement(x, y, now, last_move_time, move_delay, keys, prev_keys, ctrl, shift, step=5, w=SCREEN_W, h=SCREEN_H):

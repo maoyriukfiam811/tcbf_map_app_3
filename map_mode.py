@@ -182,8 +182,10 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         pygame.display.update(dirty)
 
         ### 確認用 ###
-        # draw_surface.blit(font_small.render(f"len(active_rects):, {len(active_rects)}", True, (0,0,0)), (10, 300))
+        # if isinstance(active, PolygonShape):
+        #     draw_surface.blit(font_small.render(f"active.dragging:, {active.dragging_vertex}", True, (0,0,0)), (10, 300))
         # draw_surface.blit(font_small.render(f"active:, {active}", True, (0,0,0)), (10, 320))
+        # draw_surface.blit(font_small.render(f"selected_vertex:, {selected_vertex}", True, (0,0,0)), (10, 340))
 
         # テキスト描画
         for t in texts:
@@ -252,12 +254,12 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         if hide_texts:
             None
         elif not hide_texts:
-        # elif not hide:
 
             # --- 操作説明表示 ---
             if active is None:
                 instructions = [
                     "クリック: オブジェクト選択",
+                    "右クリック: 四角、ポリゴン追加メニュー表示（円未実装）",
                     "Ctrl+クリック: オブジェクト複数選択",
                     "ドラッグ: オブジェクト移動",
                     "N: 四角新規追加",
@@ -314,6 +316,18 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                     # "ESC: 保存して戻る",
                     # "Ctrl+P: pngとして保存",
                     # "Ctrl+H: 操作説明非表示5秒間",
+                ]
+
+            elif isinstance(active, PolygonShape):
+                instructions = [
+                    "ドラッグ, 矢印キー: 移動",
+                    "Shift+矢印キー: 10px移動",
+                    "Ctrl+矢印キー: 50px移動",
+                    "頂点ドラッグ: 頂点移動",
+                    "Enter: 線太さ、色編集",
+                    "D: アクティブ頂点削除",
+                    "Delete: ポリゴン削除",
+                    "N: 頂点追加",
                 ]
 
 
@@ -952,17 +966,87 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                         else:
                             r.name_pos_active = False
                             active = None
-                            # テキスト選択・ドラッグ開始
-                            for t in reversed(texts): # 手前のテキストから優先的に選択
-                                if t.contains_point(pos, font_path):
-                                    active = t
-                                    t.dragging = True
-                                    t.drag_offset = (t.position[0]-pos[0], t.position[1]-pos[1])  
-                                    clicked = True
-                                    break
-                                else:
-                                    active = None
-                                    active_rects = []
+                            new = add_polygon(polygons, active, temporary_pos, screen, context_menu=True)
+                            polygons.append(new)
+                            active = new
+
+                    if not context_menu.visible:
+                        context_menu = None
+
+                    continue
+
+                # ==================================================
+                # ③ 右クリック：メニュー生成のみ
+                # ==================================================
+                if event.button == 3:
+                    temporary_pos = event.pos
+                    context_menu = ContextMenu(
+                        MENU_ITEMS_ADD_SHAPE,
+                        event.pos          # 表示用：スクリーン座標
+                    )
+
+                    continue
+
+
+                # ---- 頂点選択（最優先）----
+                if event.button == 1:
+                    (pi, vi) = get_active_point_index(internal_pos, polygons)
+                    selected_vertex = (pi, vi) if pi is not None and vi is not None else None
+                    if selected_vertex is not None:
+                        active = polygons[pi]
+
+                        active.dragging_polygon = True
+                        active.dragging_vertex = True
+                        clicked = True
+                        break
+
+                    # ---- 四角形選択 ----
+                    if not clicked:
+                        for r in reversed(rects):
+                            if r.contains_point(internal_pos):
+                                active = r
+                                r.dragging = True
+                                clicked = True
+                                break
+
+                    # ---- テキスト選択 ----
+                    if not clicked:
+                        for t in reversed(texts):
+                            if t.contains_point(internal_pos, font_path):
+                                active = t
+                                t.dragging = True
+                                clicked = True
+                                break
+
+
+                    # ---- ポリゴン選択 ----
+                    if not clicked:
+                        for p in reversed(polygons):
+                            if p.contains_line(internal_pos):
+                                active = p
+                                p.dragging_polygon = True
+                                p.dragging_vertex = False
+                                p.drag_offset = (
+                                    p.points[0][0] - internal_pos[0],
+                                    p.points[0][1] - internal_pos[1]
+                                )
+                                clicked = True
+                                break
+
+                    # ---- 何も選択されなかった場合のみ解除 ----
+                    if not clicked:
+                        for r in rects:
+                            r.dragging = False
+                        for t in texts:
+                            t.dragging = False
+                        for p in polygons:
+                            p.stop_dragging()
+                        active = None
+                        selected_vertex = None
+                        active_rects = []
+
+
+
 
                 for p in reversed(polygons):
                     if p.contains_line(pos):
@@ -1036,3 +1120,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         pygame.display.flip()
 
         clock.tick(60) # FPS
+
+
+

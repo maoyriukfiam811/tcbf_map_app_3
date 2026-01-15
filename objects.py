@@ -418,6 +418,7 @@ class TextLabel:
         self.classification = classification
         self.power = power
         self.locked = locked
+        self.dragging = False
 
 
     def to_dict(self):
@@ -823,14 +824,26 @@ class RotatingRect:
         return int(self.tent) > 0
 
     def contains_point(self, p):
-        """クリック判定"""
-        if isinstance(self, RotatingRect):
-            if hasattr(self, "_last_rect") and self._last_rect:
-                return self._last_rect.collidepoint(p)
-            else:
-                dx = p[0] - self.center[0]
-                dy = p[1] - self.center[1]
-                return math.hypot(dx,dy) < max(self.size)*1.0
+        """内部座標系での四角形クリック判定（回転対応）"""
+        px, py = p
+        cx, cy = self.center
+        w, h = self.size
+        angle = -math.radians(self.angle)  # 逆回転
+
+        # 中心基準に移動
+        dx = px - cx
+        dy = py - cy
+
+        # 逆回転
+        rx = dx * math.cos(angle) - dy * math.sin(angle)
+        ry = dx * math.sin(angle) + dy * math.cos(angle)
+
+        # 軸平行矩形として判定
+        return (
+            -w / 2 <= rx <= w / 2 and
+            -h / 2 <= ry <= h / 2
+        )
+
 
     def get_categories(self, categories, point_in_category):
         """

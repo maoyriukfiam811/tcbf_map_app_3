@@ -51,7 +51,7 @@ def main():
                 SCREEN_W, SCREEN_H = event.w, event.h
                 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.RESIZABLE)
 
-        mode, rects, texts, categories, shapes, filename, full_path = select_mode(screen, font)
+        mode, rects, texts, categories, polygons, filename, full_path = select_mode(screen, font)
         if mode is None:
             # モード選択画面で終了
             # CategoryShape.save_categories(categories)
@@ -64,7 +64,7 @@ def main():
 
         if mode == "map":
             # rects, texts, categories, filename, full_path = DataManager.load_all()
-            res = run_map_mode(screen, font, rects, texts, categories, shapes, filename)
+            res = run_map_mode(screen, font, rects, texts, categories, polygons, filename)
             if res is None:
                 # running = False
                 break
@@ -73,7 +73,7 @@ def main():
                 continue
         elif mode == "edit":
             # rects, texts, categories, filename, full_path = DataManager.load_all()
-            res = run_category_editor(screen, font, rects, texts, categories, shapes, filename)
+            res = run_category_editor(screen, font, rects, texts, categories, polygons, filename)
             if res is None:
                 # running = False
                 break
