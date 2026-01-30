@@ -100,28 +100,25 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     redraw_background_layer()
     redraw_category_layer()
 
-    # 背景・カテゴリを画面に1回描画
-    screen.blit(background_layer, (0,0))
-    screen.blit(category_layer, (0,0))
-    pygame.display.flip()
-
     ACTION_HANDLERS = {
         "add_rect": add_rect,
         "add_polygon": add_polygon,
         # "add_circle": add_circle,
     }
 
-
     # ALERT表示
-    alert_cats = []
     alert_cats = [c for c in categories if c.alert]
     show_alert = False
+
+    # テキストレンダリングキャッシュ
+    text_cache = {}
+    MAX_CACHE_SIZE = 200
 
     running = True
     while running:
         now = pygame.time.get_ticks() / 1000.0
 
-        # カテゴリ描画（名前非表示）
+        # 背景とカテゴリをまず描画
         draw_surface.blit(background_layer, (0,0))
         draw_surface.blit(shape_layer, (0,0))
 
@@ -137,7 +134,7 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
                 draw_surface.blit(background_layer, r, r)
                 draw_surface.blit(shape_layer, r, r)
                 if show_category:
-                    draw_surface.blit(category_layer, (0,0))
+                    draw_surface.blit(category_layer, r, r)
                 dirty.append(r)
 
         # rect を新しく描画
@@ -175,10 +172,16 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
         # --- 保存メッセージ表示 ---
         if now < save_message_until:
-            msg_surf = font.render("Saved all objects.", True, (0, 0, 0))
+            cache_key = ("save_msg", round(now, 1))
+            if cache_key not in text_cache:
+                text_cache[cache_key] = font.render("Saved all objects.", True, (0, 0, 0))
+            msg_surf = text_cache[cache_key]
             draw_surface.blit(msg_surf, (DRAW_W - msg_surf.get_width() - 10, 10))
         if now < export_message_until:
-            msg_surf = font.render("CSV has been exported.", True, (0, 0, 0))
+            cache_key = ("export_msg", round(now, 1))
+            if cache_key not in text_cache:
+                text_cache[cache_key] = font.render("CSV has been exported.", True, (0, 0, 0))
+            msg_surf = text_cache[cache_key]
             draw_surface.blit(msg_surf, (DRAW_W - msg_surf.get_width() - 10, 10))
 
         # イベント処理
@@ -314,19 +317,11 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
 
             # ALERT描画
-            alert_cats_name = []
-            for rect in rects:
-                for cat in alert_cats:
-                    if point_in_category(rect.center, cat):
-                        alert_cats_name.append(cat.name)
-            if alert_cats_name:
-                show_alert = True
-                show_alert_text = ", ".join(alert_cats_name)
-            else:
-                show_alert = False
-
             if show_alert:
-                alert_text = pygame.font.Font(font_path, 20).render(f"注意: {show_alert_text}", True, (255, 0, 0))
+                cache_key = ("alert", show_alert_text)
+                if cache_key not in text_cache:
+                    text_cache[cache_key] = pygame.font.Font(font_path, 20).render(f"注意: {show_alert_text}", True, (255, 0, 0))
+                alert_text = text_cache[cache_key]
                 w, h = draw_surface.get_size()
                 draw_surface.blit(alert_text, (w - alert_text.get_width() - 10, h - alert_text.get_height() - 10))
 
@@ -1069,6 +1064,12 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
 
 
         pygame.display.flip()
+        
+        # テキストキャッシュサイズ制限
+        if len(text_cache) > MAX_CACHE_SIZE:
+            keys_to_delete = list(text_cache.keys())[:50]
+            for k in keys_to_delete:
+                del text_cache[k]
 
         clock.tick(60) # FPS
 
