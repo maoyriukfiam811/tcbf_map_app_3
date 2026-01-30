@@ -24,20 +24,29 @@ def convert_mouse_to_draw_coords(pos, screen):
 # ユーティリティ関数
 # -----------------------------
 def point_in_category(pt, cat):
-    """点(pt)がカテゴリ(cat)内にあるか判定"""
-    if cat.points:
-        pts = cat.points
-        n = len(pts)
-        inside = False
-        px, py = pt
-        for i in range(n):
-            x1, y1 = pts[i]
-            x2, y2 = pts[(i + 1) % n]
-            if ((y1 > py) != (y2 > py)) and \
-               (px < (x2 - x1) * (py - y1) / (y2 - y1 + 1e-9) + x1):
-                inside = not inside
-        return inside
-    return False
+    """点(pt)がカテゴリ(cat)内にあるか判定（レイキャスティングアルゴリズム）"""
+    if not cat.points or len(cat.points) < 3:
+        return False
+    
+    pts = cat.points
+    n = len(pts)
+    inside = False
+    px, py = pt
+    
+    x1, y1 = pts[0]
+    for i in range(1, n + 1):
+        x2, y2 = pts[i % n]
+        if ((y1 > py) != (y2 > py)):
+            # 分母がゼロになるのを避ける（デジタル誤差）
+            dy = y2 - y1
+            if dy != 0:
+                # 交差判定
+                x_intersect = (x2 - x1) * (py - y1) / dy + x1
+                if px < x_intersect:
+                    inside = not inside
+        x1, y1 = x2, y2
+    
+    return inside
 
 def categories_name_containing_rect(center, categories):
     """矩形(rect)がカテゴリ(cat)内にあるか判定"""

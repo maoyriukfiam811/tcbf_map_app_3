@@ -453,7 +453,15 @@ class TextLabel:
         else:
             text_color = self.color
 
-        font = pygame.font.Font(font_path, self.font_size)
+        # フォントキャッシュ
+        cache_key = (font_path, self.font_size)
+        if not hasattr(self, '_font_cache'):
+            self._font_cache = {}
+        
+        if cache_key not in self._font_cache:
+            self._font_cache[cache_key] = pygame.font.Font(font_path, self.font_size)
+        
+        font = self._font_cache[cache_key]
         text_surf = font.render(self.text, True, text_color)
         rotated_surf = pygame.transform.rotate(text_surf, -self.angle)
         rect = rotated_surf.get_rect(midleft=self.position)
