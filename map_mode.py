@@ -50,6 +50,7 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     hide_until = 0 # テキスト非表示終了時間
     show_category = True
     selected_vertex = None
+    alert_category_names = []
 
     need_redraw = False
     ime_warned_message_until = 0 #日本語入力時警告
@@ -106,10 +107,6 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
         # "add_circle": add_circle,
     }
 
-    # ALERT表示
-    alert_cats = [c for c in categories if c.alert]
-    show_alert = False
-
     # テキストレンダリングキャッシュ
     text_cache = {}
     MAX_CACHE_SIZE = 200
@@ -117,6 +114,14 @@ def run_map_mode(screen, font, rects, texts, categories, polygons, filename):
     running = True
     while running:
         now = pygame.time.get_ticks() / 1000.0
+
+        # ALERT表示（フレームごとに計算）
+        alert_category_names = []
+        alert_cats = [c for c in categories if c.alert]
+        for r in rects:
+            alert_category_names.extend(categories_name_containing_rect(r.center, alert_cats))
+        show_alert = len(alert_category_names) > 0
+        show_alert_text = ", ".join(alert_category_names) if alert_category_names else ""
 
         # 背景とカテゴリをまず描画
         draw_surface.blit(background_layer, (0,0))
